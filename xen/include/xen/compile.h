@@ -1,0 +1,14 @@
+#define XEN_COMPILE_DATE	"Sat Mar  7 05:19:24 UTC 2020"
+#define XEN_COMPILE_TIME	"05:19:24"
+#define XEN_COMPILE_BY		"root"
+#define XEN_COMPILE_DOMAIN	"(none)"
+#define XEN_COMPILE_HOST	"syzkaller"
+#define XEN_COMPILER		"clang version 9.0.1-+20191211082622+c1a0a213378-1~exp1~20191211193200.102 "
+
+#define XEN_VERSION		4
+#define XEN_SUBVERSION		13
+#define XEN_EXTRAVERSION	".0"
+
+#define XEN_CHANGESET		""
+#define XEN_BANNER		\
+"\040\130\145\156\040\064\056\061\063\056\060\012"
