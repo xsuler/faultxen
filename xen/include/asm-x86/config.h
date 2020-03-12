@@ -219,7 +219,7 @@ extern unsigned char boot_edid_info[128];
 #define HIRO_COMPAT_MPT_VIRT_END (HIRO_COMPAT_MPT_VIRT_START + GB(1))
 /* Slot 261: xen text, static data and bss (1GB). */
 #define XEN_VIRT_START          (HIRO_COMPAT_MPT_VIRT_END)
-#define XEN_VIRT_END            (XEN_VIRT_START + GB(2))
+#define XEN_VIRT_END            (XEN_VIRT_START + GB(1))
 
 
 #ifndef CONFIG_BIGMEM

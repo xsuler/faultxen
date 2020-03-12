@@ -64,7 +64,7 @@ static inline unsigned long __virt_to_maddr(unsigned long va)
         va -= DIRECTMAP_VIRT_START;
     else
     {
-        BUILD_BUG_ON(XEN_VIRT_END - XEN_VIRT_START != GB(2));
+        BUILD_BUG_ON(XEN_VIRT_END - XEN_VIRT_START != GB(1));
         /* Signed, so ((long)XEN_VIRT_START >> 30) fits in an imm32. */
         ASSERT(((long)va >> (PAGE_ORDER_1G + PAGE_SHIFT)) ==
                ((long)XEN_VIRT_START >> (PAGE_ORDER_1G + PAGE_SHIFT)));

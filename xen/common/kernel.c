@@ -38,57 +38,34 @@ void* mem_to_shadow(void * rp){
 	    return 0;
     }
 }
+
 void report256(int32_t* addr){
-    int64_t* saddr=(int64_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 64");
 }
 
 void report128(int32_t* addr){
-    int64_t* saddr=(int64_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 64");
 }
 
 void report64(int32_t* addr){
-    int64_t* saddr=(int64_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 64");
 }
 void report48(int32_t* addr){
-    int32_t* saddr=(int32_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 32");
 }
 
 void report32(int32_t* addr){
-    int32_t* saddr=(int32_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 32");
 }
 void report24(int32_t* addr){
-    int16_t* saddr=(int16_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 24");
 }
 
 void report16(int32_t* addr){
-    int16_t* saddr=(int16_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 16");
 }
 
 void report8(int32_t* addr){
-    int8_t* saddr=(int8_t*)mem_to_shadow(addr);
-    if(!saddr)    
-	    return;
     printk("reporting 8");
 }
 
