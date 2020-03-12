@@ -64,7 +64,7 @@ CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
 CFLAGS-$(CONFIG_DEBUG_INFO) += -g
 CFLAGS += '-D__OBJECT_FILE__="$@"'
 
-TFLAGS =  -fno-discard-value-names -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/asan/build/skeleton/libSkeletonPass.so 
+TFLAGS =  -fno-discard-value-names -Xclang -load -Xclang /home/sule/Spaceship/Cpp/llvm-pass-skeleton/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /home/sule/Spaceship/Cpp/asan/build/skeleton/libSkeletonPass.so 
 
 ifneq ($(clang),y)
 # Clang doesn't understand this command line argument, and doesn't appear to
