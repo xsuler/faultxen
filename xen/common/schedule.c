@@ -1752,6 +1752,8 @@ long do_set_fault(long long int fault){
     if(fault>=0)
 	    fault_table=fault;
     printk("fault_table new: %lld\n", fault_table);
+    if(fault==-5)
+	  printk("repflag: %d\n", repflag);
     return 0;
 }
 

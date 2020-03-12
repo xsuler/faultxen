@@ -55,7 +55,20 @@ typedef __u64 __be64;
 typedef unsigned int __attribute__((__mode__(__pointer__))) uintptr_t;
 
 int willInject(int uid);
+void* mem_to_shadow(void * rp);
+void report256(int32_t* addr);
+void report128(int32_t* addr);
+void report64(int32_t* addr);
+void report48(int32_t* addr);
+void report32(int32_t* addr);
+void report24(int32_t* addr);
+void report16(int32_t* addr);
+void report8(int32_t* addr);
+
 extern long long int fault_table;
+extern long long int fault_counter;
+extern int repflag;
+extern void* shadow_base;
 
 typedef bool bool_t;
 #define test_and_set_bool(b)   xchg(&(b), true)

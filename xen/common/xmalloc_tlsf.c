@@ -68,6 +68,7 @@
 static DEFINE_SPINLOCK(pool_list_lock);
 static LIST_HEAD(pool_list_head);
 
+
 struct free_ptr {
     struct bhdr *prev;
     struct bhdr *next;
@@ -580,6 +581,38 @@ static void *add_padding(void *p, unsigned long align)
     return p;
 }
 
+
+
+void *_xmalloc_c(unsigned long size)
+{
+    unsigned long align=__alignof__(char);
+    void *p = NULL;
+
+    ASSERT(!in_irq());
+
+    if ( !size )
+        return ZERO_BLOCK_PTR;
+
+    ASSERT((align & (align - 1)) == 0);
+    if ( align < MEM_ALIGN )
+        align = MEM_ALIGN;
+    size += align - MEM_ALIGN;
+
+    if ( !xenpool )
+        tlsf_init();
+
+    if ( size < PAGE_SIZE )
+        p = xmem_pool_alloc(size, xenpool);
+    if ( p == NULL )
+        return xmalloc_whole_pages(size - align + MEM_ALIGN, align);
+
+    /* Ad set dond alignment padding. */
+    p = add_padding(p, align);
+
+    ASSERT(((unsigned long)p & (align - 1)) == 0);
+    return p;
+}
+
 void *_xmalloc(unsigned long size, unsigned long align)
 {
     void *p = NULL;
@@ -602,8 +635,23 @@ void *_xmalloc(unsigned long size, unsigned long align)
     if ( p == NULL )
         return xmalloc_whole_pages(size - align + MEM_ALIGN, align);
 
-    /* Add alignment padding. */
+    /* Ad set dond alignment padding. */
     p = add_padding(p, align);
+
+    if(shadow_base){
+	    char *shadow_addr=mem_to_shadow(p);
+
+	    for(int i=0;i<size/128;i++){
+		    *(shadow_addr+i)=0;
+	    }
+	    for(int i=0;i<size;i++){
+		    (*(shadow_addr+i/128))++;
+	    }
+	    printk("malloc %p to shadow addr %p of size %lu done\n", p,shadow_addr,size);
+    }
+    else{
+	shadow_base=_xmalloc_c(GB(1));
+    }
 
     ASSERT(((unsigned long)p & (align - 1)) == 0);
     return p;
@@ -688,6 +736,14 @@ void xfree(void *p)
     {
         unsigned long size = PFN_ORDER(virt_to_page(p));
         unsigned int i, order = get_order_from_pages(size);
+
+	if(shadow_base){
+		char *shadow_addr=mem_to_shadow(p);
+		for(int j=0;j<size;j++){
+		    (*(shadow_addr+j/128))--;
+		}
+		printk("free shadow addr %p of size %lu done\n", shadow_addr, size);
+	}
 
         BUG_ON((unsigned long)p & ((PAGE_SIZE << order) - 1));
         PFN_ORDER(virt_to_page(p)) = 0;
