@@ -1747,10 +1747,11 @@ ret_t do_sched_op(int cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
 
 #ifndef COMPAT
 
-long do_get_trace(void* trace){
-    trace->xasan_err_addr = e_trace.xasan_err_addr;
-    trace->xasan_err_size = e_trace.xasan_err_size;
-    trace->xasan_err_type = e_trace.xasan_err_type;
+long do_get_trace(long long int trace){
+    struct err_trace *m_trace=(struct err_trace*) trace;
+    m_trace->xasan_err_addr = e_trace.xasan_err_addr;
+    m_trace->xasan_err_size = e_trace.xasan_err_size;
+    m_trace->xasan_err_type = e_trace.xasan_err_type;
     return 0;
 }
 

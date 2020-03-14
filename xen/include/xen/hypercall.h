@@ -74,7 +74,7 @@ do_set_fault(
 
 extern long
 do_get_trace(
-    void* v);
+    long long int v);
 
 extern long
 do_set_timer_op(

@@ -41,7 +41,7 @@ static int compat_poll(struct compat_sched_poll *compat)
 
 int compat_set_fault(u32 lo, s32 hi)
 {
-    return do_set_fault((void*)(((s64)hi << 32) | lo));
+    return do_set_fault(((s64)hi << 32) | lo);
 }
 
 int compat_get_trace(u32 lo, s32 hi)

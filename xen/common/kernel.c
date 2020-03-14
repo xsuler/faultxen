@@ -46,12 +46,11 @@ void* mem_to_shadow(void * rp, int* i){
 void report_xasan(int64_t* addr, int64_t size, int64_t type){
     if(xasan_flag==0)
 	    return;
-    int order;
-    void* shadow;
+//    void* shadow;
     for(int i=0;i<size;i++){
 	addr = addr - 0xffff830000000000;
-	order=(long)addr&7;
-	shadow = ((long)addr>>3)+shadow_base;
+//	int ord=(long)addr&7;
+//	shadow = ((long)addr>>3)+shadow_base;
 
 //	int s=*p;
 //	if(s==0xff)

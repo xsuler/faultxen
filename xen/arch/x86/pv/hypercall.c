@@ -50,6 +50,7 @@ const hypercall_table_t pv_hypercall_table[] = {
     COMPAT_CALL(update_va_mapping),
     COMPAT_CALL(set_timer_op),
     COMPAT_CALL(set_fault),
+    COMPAT_CALL(get_trace),
     HYPERCALL(event_channel_op_compat),
     COMPAT_CALL(xen_version),
     HYPERCALL(console_io),
