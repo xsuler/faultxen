@@ -25,51 +25,51 @@ xen_commandline_t saved_cmdline;
 static const char __initconst opt_builtin_cmdline[] = CONFIG_CMDLINE;
 
 long long int fault_table=0;
-int repflag=0;
 long long int fault_counter =0;
 void* shadow_base=0;
+int xasan_flag=0;
 
-void* mem_to_shadow(void * rp){
+void* xasan_err_addr=0;
+int64_t xasan_err_size=0;
+int xasan_err_type=0;
+
+void* mem_to_shadow(void * rp, char* i){
     if(shadow_base){
 	    rp=rp-0xffff830000000000;
-	    return ((long)rp>>7)+shadow_base;
+	    *i=(long)rp&7;
+	    return ((long)rp>>3)+shadow_base;
     }
     else{
 	    return 0;
     }
 }
-
-void report256(int32_t* addr){
-    printk("reporting 64");
+void report_action(int64_t* addr, int64_t size, int64_t type){
+    if(type){
+	    printk("error writing %p of size %ld byte of value %ld\n" ,addr, size, *addr);
+    }
+    else{
+	    printk("error reading %p of size %ld byte of value %ld\n" ,addr, size, *addr);
+    }
 }
+void report_xasan(int64_t* addr, int64_t size, int64_t type){
+    if(xasan_flag==0)
+	    return;
+    char order;
+    for(int i=0;i<size;i++){
 
-void report128(int32_t* addr){
-    printk("reporting 64");
+	char* p =mem_to_shadow(addr+i,&order);
+	if(*p==0xff)
+		continue;
+	else{
+		if(order>*p){
+		    xasan_err_addr=addr;
+		    xasan_err_size=size;
+		    xasan_err_type=type;
+		    break;
+		}
+	}
+    }
 }
-
-void report64(int32_t* addr){
-    printk("reporting 64");
-}
-void report48(int32_t* addr){
-    printk("reporting 32");
-}
-
-void report32(int32_t* addr){
-    printk("reporting 32");
-}
-void report24(int32_t* addr){
-    printk("reporting 24");
-}
-
-void report16(int32_t* addr){
-    printk("reporting 16");
-}
-
-void report8(int32_t* addr){
-    printk("reporting 8");
-}
-
-
   
 int willInject(int uid){
    printk("%lld walk into fault: %d\n", fault_counter++, uid);

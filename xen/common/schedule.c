@@ -1752,8 +1752,14 @@ long do_set_fault(long long int fault){
     if(fault>=0)
 	    fault_table=fault;
     printk("fault_table new: %lld\n", fault_table);
-    if(fault==-5)
-	  printk("repflag: %d\n", repflag);
+    if(fault==-1){
+	  xasan_flag = 1- xasan_flag;
+	  printk("set xasan_flag: %d\n", xasan_flag);
+    }
+    if(fault==-2){
+	  report_action(xasan_err_addr,xasan_err_size, xasan_err_type);
+    }
+
     return 0;
 }
 

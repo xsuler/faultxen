@@ -639,18 +639,20 @@ void *_xmalloc(unsigned long size, unsigned long align)
     p = add_padding(p, align);
 
     if(shadow_base){
-	    char *shadow_addr=mem_to_shadow(p);
+	    char i;
+	    char *shadow_addr=mem_to_shadow(p,&i);
 
-	    for(int i=0;i<size/128;i++){
+	    for(int i=0;i<(size>>3);i++){
 		    *(shadow_addr+i)=0;
 	    }
 	    for(int i=0;i<size;i++){
-		    (*(shadow_addr+i/128))++;
+		    (*(shadow_addr+(i>>3)))++;
 	    }
 	    printk("malloc %p to shadow addr %p of size %lu done\n", p,shadow_addr,size);
     }
     else{
 	shadow_base=_xmalloc_c(GB(1));
+	memset(shadow_base,0xff,GB(1));
     }
 
     ASSERT(((unsigned long)p & (align - 1)) == 0);
@@ -738,9 +740,10 @@ void xfree(void *p)
         unsigned int i, order = get_order_from_pages(size);
 
 	if(shadow_base){
-		char *shadow_addr=mem_to_shadow(p);
+		char i;
+		char *shadow_addr=mem_to_shadow(p,&i);
 		for(int j=0;j<size;j++){
-		    (*(shadow_addr+j/128))--;
+		    (*(shadow_addr+(j>>3)))--;
 		}
 		printk("free shadow addr %p of size %lu done\n", shadow_addr, size);
 	}
