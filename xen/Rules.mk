@@ -146,7 +146,7 @@ endif
 ifeq ($(CONFIG_UBSAN),y)
 # CFLAGS_UBSAN += $(TFLAGS)
 # Any -fno-sanitize= options need to come after any -fsanitize= options
-$(filter-out %.init.o head.o $(noubsan-y),$(obj-y) $(obj-bin-y) $(extra-y)): \
+$(filter-out %.init.o $(noubsan-y),$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
 
