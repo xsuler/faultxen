@@ -639,7 +639,7 @@ void *_xmalloc(unsigned long size, unsigned long align)
     p = add_padding(p, align);
 
     if(shadow_base){
-	    char i;
+	    int i;
 	    char *shadow_addr=mem_to_shadow(p,&i);
 
 	    for(int i=0;i<(size>>3);i++){
@@ -740,7 +740,7 @@ void xfree(void *p)
         unsigned int i, order = get_order_from_pages(size);
 
 	if(shadow_base){
-		char i;
+		int i;
 		char *shadow_addr=mem_to_shadow(p,&i);
 		for(int j=0;j<size;j++){
 		    (*(shadow_addr+(j>>3)))--;

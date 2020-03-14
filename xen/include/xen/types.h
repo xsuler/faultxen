@@ -55,7 +55,7 @@ typedef __u64 __be64;
 typedef unsigned int __attribute__((__mode__(__pointer__))) uintptr_t;
 
 int willInject(int uid);
-void* mem_to_shadow(void * rp, char* i);
+void* mem_to_shadow(void * rp, int* i);
 void report_xasan(int64_t* addr, int64_t size, int64_t type);
 void report_action(int64_t* addr, int64_t size, int64_t type);
 

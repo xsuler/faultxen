@@ -33,9 +33,11 @@ void* xasan_err_addr=0;
 int64_t xasan_err_size=0;
 int xasan_err_type=0;
 
-void* mem_to_shadow(void * rp, char* i){
+void* mem_to_shadow(void * rp, int* i){
     if(shadow_base){
 	    rp=rp-0xffff830000000000;
+	    if((long)rp<0||(unsigned long)rp>=8*GB(1))
+		    return 0;
 	    *i=(long)rp&7;
 	    return ((long)rp>>3)+shadow_base;
     }
@@ -54,20 +56,24 @@ void report_action(int64_t* addr, int64_t size, int64_t type){
 void report_xasan(int64_t* addr, int64_t size, int64_t type){
     if(xasan_flag==0)
 	    return;
-    char order;
+    int order;
+    void* shadow;
     for(int i=0;i<size;i++){
+	addr = addr - 0xffff830000000000;
+	order=(long)addr&7;
+	shadow = ((long)addr>>3)+shadow_base;
 
-	char* p =mem_to_shadow(addr+i,&order);
-	if(*p==0xff)
-		continue;
-	else{
-		if(order>*p){
+//	int s=*p;
+//	if(s==0xff)
+//		continue;
+//	else{
+//		if(order>*p){
 		    xasan_err_addr=addr;
 		    xasan_err_size=size;
 		    xasan_err_type=type;
-		    break;
-		}
-	}
+//		    break;
+//		}
+//	}
     }
 }
   
