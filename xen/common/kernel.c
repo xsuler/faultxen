@@ -48,7 +48,7 @@ void report_xasan(int64_t* addr, int64_t size, int64_t type){
 	    return;
 //    void* shadow;
     for(int i=0;i<size;i++){
-	addr = addr - 0xffff830000000000;
+	char* paddr = addr + size - 0xffff830000000000;
 //	int ord=(long)addr&7;
 //	shadow = ((long)addr>>3)+shadow_base;
 
@@ -57,7 +57,7 @@ void report_xasan(int64_t* addr, int64_t size, int64_t type){
 //		continue;
 //	else{
 //		if(order>*p){
-		    e_trace.xasan_err_addr=addr;
+		    e_trace.xasan_err_addr=paddr;
 		    e_trace.xasan_err_size=size;
 		    e_trace.xasan_err_type=type;
 		    break;

@@ -1765,6 +1765,13 @@ long do_set_fault(long long int fault){
 	  xasan_flag = 1- xasan_flag;
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
+    if(fault==-2){
+	    int k=1;
+	    int* pp = &k;
+	    *pp=2;
+	  printk("store pp done %p\n",pp);
+    }
+ 
     return 0;
 }
 
