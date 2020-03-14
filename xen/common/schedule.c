@@ -1747,6 +1747,14 @@ ret_t do_sched_op(int cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
 
 #ifndef COMPAT
 
+long do_get_trace(void* trace){
+    trace->xasan_err_addr = e_trace.xasan_err_addr;
+    trace->xasan_err_size = e_trace.xasan_err_size;
+    trace->xasan_err_type = e_trace.xasan_err_type;
+    return 0;
+}
+
+
 long do_set_fault(long long int fault){
     printk("fault_table: %lld\n", fault_table);
     if(fault>=0)
@@ -1756,10 +1764,6 @@ long do_set_fault(long long int fault){
 	  xasan_flag = 1- xasan_flag;
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
-    if(fault==-2){
-	  report_action(xasan_err_addr,xasan_err_size, xasan_err_type);
-    }
-
     return 0;
 }
 

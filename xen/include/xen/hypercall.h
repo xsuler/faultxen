@@ -72,6 +72,9 @@ extern long
 do_set_fault(
     long long int v);
 
+extern long
+do_get_trace(
+    void* v);
 
 extern long
 do_set_timer_op(
@@ -196,6 +199,12 @@ extern int
 compat_set_fault(
     u32 lo,
     s32 hi);
+
+extern int
+compat_get_trace(
+    u32 lo,
+    s32 hi);
+
 
 extern int compat_xsm_op(
     XEN_GUEST_HANDLE_PARAM(xsm_op_t) op);

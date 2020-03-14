@@ -59,13 +59,19 @@ void* mem_to_shadow(void * rp, int* i);
 void report_xasan(int64_t* addr, int64_t size, int64_t type);
 void report_action(int64_t* addr, int64_t size, int64_t type);
 
+struct err_trace
+{
+	void* xasan_err_addr;
+	int64_t xasan_err_size;
+	int xasan_err_type;
+};
+
+
 extern long long int fault_table;
 extern long long int fault_counter;
 extern void* shadow_base;
 extern int xasan_flag;
-extern void* xasan_err_addr;
-extern int64_t xasan_err_size;
-extern int xasan_err_type;
+extern struct err_trace e_trace;
 
 typedef bool bool_t;
 #define test_and_set_bool(b)   xchg(&(b), true)

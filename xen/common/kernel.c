@@ -28,10 +28,7 @@ long long int fault_table=0;
 long long int fault_counter =0;
 void* shadow_base=0;
 int xasan_flag=0;
-
-void* xasan_err_addr=0;
-int64_t xasan_err_size=0;
-int xasan_err_type=0;
+struct err_trace e_trace = {.xasan_err_addr = 0, .xasan_err_size=0, .xasan_err_type =0};
 
 void* mem_to_shadow(void * rp, int* i){
     if(shadow_base){
@@ -45,14 +42,7 @@ void* mem_to_shadow(void * rp, int* i){
 	    return 0;
     }
 }
-void report_action(int64_t* addr, int64_t size, int64_t type){
-    if(type){
-	    printk("error writing %p of size %ld byte of value %ld\n" ,addr, size, *addr);
-    }
-    else{
-	    printk("error reading %p of size %ld byte of value %ld\n" ,addr, size, *addr);
-    }
-}
+
 void report_xasan(int64_t* addr, int64_t size, int64_t type){
     if(xasan_flag==0)
 	    return;
@@ -68,10 +58,10 @@ void report_xasan(int64_t* addr, int64_t size, int64_t type){
 //		continue;
 //	else{
 //		if(order>*p){
-		    xasan_err_addr=addr;
-		    xasan_err_size=size;
-		    xasan_err_type=type;
-//		    break;
+		    e_trace.xasan_err_addr=addr;
+		    e_trace.xasan_err_size=size;
+		    e_trace.xasan_err_type=type;
+		    break;
 //		}
 //	}
     }
