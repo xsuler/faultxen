@@ -1766,10 +1766,9 @@ long do_set_fault(long long int fault){
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
      if(fault==-3){
-	  int* c = xmalloc(int);
-	  xfree(c);
-	  xfree(c);
-	  printk("double free : %p\n", c);
+	     int* p=xmalloc(int);
+	     xfree(p);
+	     printk("double free %p\n",p);
     }
 
     return 0;

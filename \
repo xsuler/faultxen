@@ -608,6 +608,7 @@ void *_xmalloc_c(unsigned long size)
 
     /* Ad set dond alignment padding. */
     p = add_padding(p, align);
+    heap_top=(unsigned long)p>(unsigned long)heap_top?p:heap_top;
 
     ASSERT(((unsigned long)p & (align - 1)) == 0);
     return p;
@@ -637,16 +638,17 @@ void *_xmalloc(unsigned long size, unsigned long align)
 
     /* Ad set dond alignment padding. */
     p = add_padding(p, align);
+    heap_top=(unsigned long)p>(unsigned long)heap_top?p:heap_top;
 
+    printk("malloc addr %p\n",p);
     if(shadow_base){
-	printk("xmalloc %p of size %ld\n",p,size);
-//	    for(int i=0;i<size;i++){
-//		    int ord;
-//		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
-//		    if(!shadow_addr)
-//			    break;
-//		    (*shadow_addr)++;
-//	    }
+	    for(int i=0;i<size;i++){
+		    int ord;
+		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
+		    if(!shadow_addr)
+			    break;
+		    (*shadow_addr)++;
+	    }
     }
     else{
 	shadow_base=_xmalloc_c(GB(1));
@@ -737,26 +739,25 @@ void xfree(void *p)
         unsigned long size = PFN_ORDER(virt_to_page(p));
         unsigned int i, order = get_order_from_pages(size);
 
+        printk("free addr %p\n",p);
 	if(shadow_base){
-		printk("xfree %p of size %ld\n",p,size);
-
-//	    for(int i=0;i<size;i++){
-//		    int ord;
-//		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
-//		    if(!shadow_addr){
-//			    break;
-//		    }
-//		    if(ord>(*shadow_addr)){
-//			   e_trace.xasan_err_addr=p;
-//			   e_trace.xasan_err_size=size;
-//			   e_trace.xasan_err_type=1;
-//			   return;
-//		    }
-//		    else{
-//			    (*shadow_addr)--;
-//		    }
-//	    }
-
+	    for(int i=0;i<size;i++){
+		    int ord;
+		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
+		    if(!shadow_addr){
+			    printk("free %p with invalid shadow addr",p);
+			    break;
+		    }
+		    if(ord>(*shadow_addr)){
+			   e_trace.xasan_err_addr=p;
+			   e_trace.xasan_err_size=size;
+			   e_trace.xasan_err_type=1;
+			   return;
+		    }
+		    else{
+			    (*shadow_addr)--;
+		    }
+	    }
 	}
 
         BUG_ON((unsigned long)p & ((PAGE_SIZE << order) - 1));

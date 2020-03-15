@@ -34,34 +34,12 @@ void* mem_to_shadow(void * addr, int* ord){
     int64_t* paddr;
     void* shadow=0;
     if(shadow_base){
-        if((unsigned long)addr>=(unsigned long)0xffff82c000000000&&(unsigned long)addr<(unsigned long)0xffff82c000000000+GB(2)){
-		paddr = addr  - 0xffff82d040000000;
-		printk("base: %p\n", (void*)0xffff82c000000000);
-	}
-	if((unsigned long)addr>=(unsigned long)0xffff82d040000000&&(unsigned long)addr<(unsigned long)0xffff82d07fffffff){
-		paddr = addr - 0xffff82d040000000 +(GB(2)>>3);
-		printk("base: %p\n", (void*)0xffff82c000000000);
-	}
-	if((unsigned long)addr>=(unsigned long)0xffff830000000000&&(unsigned long)addr<(unsigned long)shadow_base){
-		paddr = addr - 0xffff830000000000+(GB(1)>>3) +(GB(2)>>3);
-		printk("lower than shadow base: %p\n",(void*) 0xffff83000000000);
-	}
-	if((unsigned long)addr>(unsigned long)shadow_base+GB(1)&&(unsigned long)addr<(unsigned long)shadow_base+GB(2)){
-		paddr = addr  -GB(1)+(GB(1)>>3) +(GB(2)>>3) - 0xffff830000000000;
-		printk("higher than shadow base: %p\n", (void*)0xffff83000000000);
-	}
-
-
-
+	paddr = addr  - 0xffff8300bf400000;
 	*ord=(int)paddr&7;
 	shadow = ((long)paddr>>3)+shadow_base;
-	printk("shadow adddr: %p of addr: %p\n", shadow, addr);
-
 	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base){
-		printk("exceed\n");
 		return 0;
 	}
-
 	return shadow;
     }
     else{
@@ -72,28 +50,21 @@ void* mem_to_shadow(void * addr, int* ord){
 void report_xasan(int64_t* addr, int64_t size, int64_t type){
     if(xasan_flag==0)
 	    return;
-    void* shadow;
-    int64_t* paddr;
-    for(int i=0;i<size;i++){
-        if((unsigned long)addr>=(unsigned long)0xffff82c000000000&&(unsigned long)addr<(unsigned long)0xffff82c000000000+GB(2)){
-		paddr = addr + size - 0xffff82d040000000;
-	}
-	if((unsigned long)addr>=(unsigned long)0xffff82d040000000&&(unsigned long)addr<(unsigned long)0xffff82d07fffffff){
-		paddr = addr + size - 0xffff82d040000000 +(GB(2)>>3);
-	}
-	if((unsigned long)addr>=(unsigned long)0xffff830000000000&&(unsigned long)addr<(unsigned long)shadow_base){
-		paddr = addr + size - 0xffff830000000000+(GB(1)>>3) +(GB(2)>>3);
-	}
-	if((unsigned long)addr>(unsigned long)shadow_base+GB(1)&&(unsigned long)addr<(unsigned long)shadow_base+GB(2)){
-		paddr = addr + size -GB(1)+(GB(1)>>3) +(GB(2)>>3) - 0xffff830000000000;
-	}
 
+//    void* shadow;
+//    int64_t* paddr=0;
+//    for(int i=0;i<size;i++){
+//	if((unsigned long)addr>=(unsigned long)0xffff8300bf400000){
+//		paddr = addr + size - 0xffff8300bf400000;
+//	}
+//
 //	int ord=(long)paddr&7;
-	shadow = ((long)paddr>>3)+shadow_base;
-
-	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base)
-		return;
-
+//	shadow = ((long)paddr>>3)+shadow_base;
+//	break;
+//
+//	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base)
+//		return;
+//
 //	int s=*(int*)shadow;
 //	if(ord>s){
 //	    e_trace.xasan_err_addr=shadow;
@@ -101,7 +72,7 @@ void report_xasan(int64_t* addr, int64_t size, int64_t type){
 //	    e_trace.xasan_err_type=0;
 //	    break;
 //	}
-    }
+//    }
 }
   
 int willInject(int uid){
