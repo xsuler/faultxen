@@ -1765,20 +1765,13 @@ long do_set_fault(long long int fault){
 	  xasan_flag = 1- xasan_flag;
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
-    if(fault==-2){
-	    int a=1;
-	    int* pp = (int*)vmalloc(sizeof(int));
-	    *pp=2;
-	  printk("store pp done %p a: %p\n",pp,&a);
-    }
      if(fault==-3){
-	    int* ppr = (int*)vmalloc(sizeof(int));
-	    *ppr=2;
-	    vfree(ppr);
-	    vfree(ppr);
-	  printk("double free: %p\n",ppr);
+	  int* c = xmalloc(int);
+	  xfree(c);
+	  xfree(c);
+	  printk("double free : %p\n", c);
     }
- 
+
     return 0;
 }
 

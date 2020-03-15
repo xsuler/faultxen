@@ -32,28 +32,35 @@ struct err_trace e_trace = {.xasan_err_addr = 0, .xasan_err_size=0, .xasan_err_t
 
 void* mem_to_shadow(void * addr, int* ord){
     int64_t* paddr;
-    void* shadow;
+    void* shadow=0;
     if(shadow_base){
         if((unsigned long)addr>=(unsigned long)0xffff82c000000000&&(unsigned long)addr<(unsigned long)0xffff82c000000000+GB(2)){
 		paddr = addr  - 0xffff82d040000000;
+		printk("base: %p\n", (void*)0xffff82c000000000);
 	}
 	if((unsigned long)addr>=(unsigned long)0xffff82d040000000&&(unsigned long)addr<(unsigned long)0xffff82d07fffffff){
 		paddr = addr - 0xffff82d040000000 +(GB(2)>>3);
+		printk("base: %p\n", (void*)0xffff82c000000000);
 	}
 	if((unsigned long)addr>=(unsigned long)0xffff830000000000&&(unsigned long)addr<(unsigned long)shadow_base){
 		paddr = addr - 0xffff830000000000+(GB(1)>>3) +(GB(2)>>3);
+		printk("lower than shadow base: %p\n",(void*) 0xffff83000000000);
 	}
 	if((unsigned long)addr>(unsigned long)shadow_base+GB(1)&&(unsigned long)addr<(unsigned long)shadow_base+GB(2)){
 		paddr = addr  -GB(1)+(GB(1)>>3) +(GB(2)>>3) - 0xffff830000000000;
+		printk("higher than shadow base: %p\n", (void*)0xffff83000000000);
 	}
 
 
 
 	*ord=(int)paddr&7;
 	shadow = ((long)paddr>>3)+shadow_base;
+	printk("shadow adddr: %p of addr: %p\n", shadow, addr);
 
-	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base)
+	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base){
+		printk("exceed\n");
 		return 0;
+	}
 
 	return shadow;
     }
@@ -81,7 +88,7 @@ void report_xasan(int64_t* addr, int64_t size, int64_t type){
 		paddr = addr + size -GB(1)+(GB(1)>>3) +(GB(2)>>3) - 0xffff830000000000;
 	}
 
-	int ord=(long)paddr&7;
+//	int ord=(long)paddr&7;
 	shadow = ((long)paddr>>3)+shadow_base;
 
 	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base)

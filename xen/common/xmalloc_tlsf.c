@@ -638,6 +638,7 @@ void *_xmalloc(unsigned long size, unsigned long align)
     /* Ad set dond alignment padding. */
     p = add_padding(p, align);
 
+    printk("malloc addr %p\n",p);
     if(shadow_base){
 	    for(int i=0;i<size;i++){
 		    int ord;
@@ -736,17 +737,18 @@ void xfree(void *p)
         unsigned long size = PFN_ORDER(virt_to_page(p));
         unsigned int i, order = get_order_from_pages(size);
 
+        printk("free addr %p\n",p);
 	if(shadow_base){
 	    for(int i=0;i<size;i++){
 		    int ord;
 		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
 		    if(!shadow_addr)
 			    break;
-		    if(ord<(*shadow_addr)){
+		    if(ord>(*shadow_addr)){
 			   e_trace.xasan_err_addr=p;
 			   e_trace.xasan_err_size=size;
 			   e_trace.xasan_err_type=1;
-			   break;
+			   return;
 		    }
 		    else{
 			    (*shadow_addr)--;
