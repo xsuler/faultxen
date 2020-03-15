@@ -639,20 +639,17 @@ void *_xmalloc(unsigned long size, unsigned long align)
     p = add_padding(p, align);
 
     if(shadow_base){
-	    int i;
-	    char *shadow_addr=mem_to_shadow(p,&i);
-
-	    for(int i=0;i<(size>>3);i++){
-		    *(shadow_addr+i)=0;
-	    }
 	    for(int i=0;i<size;i++){
-		    (*(shadow_addr+(i>>3)))++;
+		    int ord;
+		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
+		    if(!shadow_addr)
+			    break;
+		    (*shadow_addr)++;
 	    }
-	    printk("malloc %p to shadow addr %p of size %lu done\n", p,shadow_addr,size);
     }
     else{
 	shadow_base=_xmalloc_c(GB(1));
-	memset(shadow_base,0xff,GB(1));
+	memset(shadow_base,0,GB(1));
     }
 
     ASSERT(((unsigned long)p & (align - 1)) == 0);
@@ -740,12 +737,21 @@ void xfree(void *p)
         unsigned int i, order = get_order_from_pages(size);
 
 	if(shadow_base){
-		int i;
-		char *shadow_addr=mem_to_shadow(p,&i);
-		for(int j=0;j<size;j++){
-		    (*(shadow_addr+(j>>3)))--;
-		}
-		printk("free shadow addr %p of size %lu done\n", shadow_addr, size);
+	    for(int i=0;i<size;i++){
+		    int ord;
+		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
+		    if(!shadow_addr)
+			    break;
+		    if(ord<(*shadow_addr)){
+			   e_trace.xasan_err_addr=p;
+			   e_trace.xasan_err_size=size;
+			   e_trace.xasan_err_type=1;
+			   break;
+		    }
+		    else{
+			    (*shadow_addr)--;
+		    }
+	    }
 	}
 
         BUG_ON((unsigned long)p & ((PAGE_SIZE << order) - 1));

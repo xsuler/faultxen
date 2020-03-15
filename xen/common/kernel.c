@@ -30,13 +30,32 @@ void* shadow_base=0;
 int xasan_flag=0;
 struct err_trace e_trace = {.xasan_err_addr = 0, .xasan_err_size=0, .xasan_err_type =0};
 
-void* mem_to_shadow(void * rp, int* i){
+void* mem_to_shadow(void * addr, int* ord){
+    int64_t* paddr;
+    void* shadow;
     if(shadow_base){
-	    rp=rp-0xffff830000000000;
-	    if((long)rp<0||(unsigned long)rp>=8*GB(1))
-		    return 0;
-	    *i=(long)rp&7;
-	    return ((long)rp>>3)+shadow_base;
+        if((unsigned long)addr>=(unsigned long)0xffff82c000000000&&(unsigned long)addr<(unsigned long)0xffff82c000000000+GB(2)){
+		paddr = addr  - 0xffff82d040000000;
+	}
+	if((unsigned long)addr>=(unsigned long)0xffff82d040000000&&(unsigned long)addr<(unsigned long)0xffff82d07fffffff){
+		paddr = addr - 0xffff82d040000000 +(GB(2)>>3);
+	}
+	if((unsigned long)addr>=(unsigned long)0xffff830000000000&&(unsigned long)addr<(unsigned long)shadow_base){
+		paddr = addr - 0xffff830000000000+(GB(1)>>3) +(GB(2)>>3);
+	}
+	if((unsigned long)addr>(unsigned long)shadow_base+GB(1)&&(unsigned long)addr<(unsigned long)shadow_base+GB(2)){
+		paddr = addr  -GB(1)+(GB(1)>>3) +(GB(2)>>3) - 0xffff830000000000;
+	}
+
+
+
+	*ord=(int)paddr&7;
+	shadow = ((long)paddr>>3)+shadow_base;
+
+	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base)
+		return 0;
+
+	return shadow;
     }
     else{
 	    return 0;
@@ -46,22 +65,34 @@ void* mem_to_shadow(void * rp, int* i){
 void report_xasan(int64_t* addr, int64_t size, int64_t type){
     if(xasan_flag==0)
 	    return;
-//    void* shadow;
+    void* shadow;
+    int64_t* paddr;
     for(int i=0;i<size;i++){
-	int64_t* paddr = addr + size - 0xffff830000000000;
-//	int ord=(long)addr&7;
-//	shadow = ((long)addr>>3)+shadow_base;
+        if((unsigned long)addr>=(unsigned long)0xffff82c000000000&&(unsigned long)addr<(unsigned long)0xffff82c000000000+GB(2)){
+		paddr = addr + size - 0xffff82d040000000;
+	}
+	if((unsigned long)addr>=(unsigned long)0xffff82d040000000&&(unsigned long)addr<(unsigned long)0xffff82d07fffffff){
+		paddr = addr + size - 0xffff82d040000000 +(GB(2)>>3);
+	}
+	if((unsigned long)addr>=(unsigned long)0xffff830000000000&&(unsigned long)addr<(unsigned long)shadow_base){
+		paddr = addr + size - 0xffff830000000000+(GB(1)>>3) +(GB(2)>>3);
+	}
+	if((unsigned long)addr>(unsigned long)shadow_base+GB(1)&&(unsigned long)addr<(unsigned long)shadow_base+GB(2)){
+		paddr = addr + size -GB(1)+(GB(1)>>3) +(GB(2)>>3) - 0xffff830000000000;
+	}
 
-//	int s=*p;
-//	if(s==0xff)
-//		continue;
-//	else{
-//		if(order>*p){
-		    e_trace.xasan_err_addr=paddr;
-		    e_trace.xasan_err_size=size;
-		    e_trace.xasan_err_type=type;
-		    break;
-//		}
+	int ord=(long)paddr&7;
+	shadow = ((long)paddr>>3)+shadow_base;
+
+	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base)
+		return;
+
+//	int s=*(int*)shadow;
+//	if(ord>s){
+//	    e_trace.xasan_err_addr=shadow;
+//	    e_trace.xasan_err_size=size;
+//	    e_trace.xasan_err_type=0;
+//	    break;
 //	}
     }
 }

@@ -1766,12 +1766,17 @@ long do_set_fault(long long int fault){
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
     if(fault==-2){
+	    int a=1;
 	    int* pp = (int*)vmalloc(sizeof(int));
 	    *pp=2;
-	  printk("store pp done %p\n",pp);
+	  printk("store pp done %p a: %p\n",pp,&a);
     }
      if(fault==-3){
-	  printk("addr: %p\n",e_trace.xasan_err_addr);
+	    int* ppr = (int*)vmalloc(sizeof(int));
+	    *ppr=2;
+	    vfree(ppr);
+	    vfree(ppr);
+	  printk("double free: %p\n",ppr);
     }
  
     return 0;
