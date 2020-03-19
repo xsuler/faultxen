@@ -24,8 +24,10 @@ xen_commandline_t saved_cmdline;
 static const char __initconst opt_builtin_cmdline[] = CONFIG_CMDLINE;
 
 long long int fault_table=0;
+long long int fault_counter =0;
   
 int willInject(int uid){
+   printk("%lld walk into fault: %d\n", fault_counter++, uid);
    return  (fault_table>>uid)&1;
 }
 

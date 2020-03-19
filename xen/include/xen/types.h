@@ -56,6 +56,7 @@ typedef unsigned int __attribute__((__mode__(__pointer__))) uintptr_t;
 
 int willInject(int uid);
 extern long long int fault_table;
+extern long long int fault_counter;
 
 typedef bool bool_t;
 #define test_and_set_bool(b)   xchg(&(b), true)
