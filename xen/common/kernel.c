@@ -28,51 +28,76 @@ long long int fault_table=0;
 long long int fault_counter =0;
 void* shadow_base=0;
 int xasan_flag=0;
-struct err_trace e_trace = {.xasan_err_addr = 0, .xasan_err_size=0, .xasan_err_type =0};
+struct err_trace e_trace = {.xasan_err_addr = 0, .xasan_err_size=0, .xasan_err_type =0, .xasan_trace[0 ... 19][0 ... 99]=0, .xasan_trace_pos=0};
 
-void* mem_to_shadow(void * addr, int* ord){
-    int64_t* paddr;
-    void* shadow=0;
-    if(shadow_base){
-	paddr = addr  - 0xffff8300bf400000;
-	*ord=(int)paddr&7;
-	shadow = ((long)paddr>>3)+shadow_base;
-	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base){
-		return 0;
-	}
-	return shadow;
-    }
-    else{
-	    return 0;
-    }
+
+
+void enter_func(char* name){
+    if(xasan_flag==0)
+	    return;
+     int len=0;
+     while(1){
+	if(name[len]==0)
+		break;
+	len++;
+     }
+     memcpy(e_trace.xasan_trace[e_trace.xasan_trace_pos],name,len+1);
+     e_trace.xasan_trace_pos++;
+     e_trace.xasan_trace_pos=e_trace.xasan_trace_pos%20;
 }
+ 
+void leave_func(){
+    if(xasan_flag==0)
+	    return;
+    e_trace.xasan_trace_pos--;
+    if(e_trace.xasan_trace_pos<0)
+	    e_trace.xasan_trace_pos=19;
+    e_trace.xasan_trace[e_trace.xasan_trace_pos][0]=0;
+}
+
+
+void mark_valid(int64_t* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		(*shadow)=(*shadow)|(1<<ord);
+	}
+
+}
+void mark_invalid(int64_t* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		(*shadow)=(*shadow)&(~(1<<ord));
+	}
+}
+
 
 void report_xasan(int64_t* addr, int64_t size, int64_t type){
     if(xasan_flag==0)
 	    return;
 
-//    void* shadow;
-//    int64_t* paddr=0;
-//    for(int i=0;i<size;i++){
-//	if((unsigned long)addr>=(unsigned long)0xffff8300bf400000){
-//		paddr = addr + size - 0xffff8300bf400000;
-//	}
-//
-//	int ord=(long)paddr&7;
-//	shadow = ((long)paddr>>3)+shadow_base;
-//	break;
-//
-//	if((unsigned long)shadow>(unsigned long)shadow_base+GB(1)||(unsigned long)shadow<(unsigned long)shadow_base)
-//		return;
-//
-//	int s=*(int*)shadow;
-//	if(ord>s){
-//	    e_trace.xasan_err_addr=shadow;
-//	    e_trace.xasan_err_size=size;
-//	    e_trace.xasan_err_type=0;
-//	    break;
-//	}
-//    }
+    void* shadow;
+    int ord;
+    for(int i=0;i<size;i++){
+	shadow=mem_to_shadow(addr+i,&ord);
+	if(!shadow)
+		return;
+
+	char s=*(char*)shadow;
+	if(!(s&(1<<ord))){
+	    e_trace.xasan_err_addr=shadow;
+	    e_trace.xasan_err_size=size;
+	    e_trace.xasan_err_type=2;
+	    e_trace.xasan_ord=ord;
+	    e_trace.xasan_shadow=s;
+	    break;
+	}
+    }
 }
   
 int willInject(int uid){

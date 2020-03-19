@@ -637,22 +637,24 @@ void *_xmalloc(unsigned long size, unsigned long align)
 
     /* Ad set dond alignment padding. */
     p = add_padding(p, align);
-
-    if(shadow_base){
-	printk("xmalloc %p of size %ld\n",p,size);
-//	    for(int i=0;i<size;i++){
+    if(!shadow_base ){
+	shadow_base=_xmalloc_c(GB(1));
+	memset(shadow_base,0xff,GB(1));
+    }
+//    if(xasan_flag){
+//	    int sizeb=size>>3;
+//	    for(int i=0;i<sizeb;i++){
 //		    int ord;
-//		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
+//		    char*shadow_addr=(char*)mem_to_shadow(p+i,&ord);
 //		    if(!shadow_addr)
 //			    break;
 //		    (*shadow_addr)++;
+//		    if((*shadow_addr)>32||(*shadow_addr)<0||ord!=(*shadow_addr)){
+//			    printk("invalid shadow val: %d, ord: %d of addr %p",*(shadow_addr),ord,p);
+//		    }
 //	    }
-    }
-    else{
-	shadow_base=_xmalloc_c(GB(1));
-	memset(shadow_base,0,GB(1));
-    }
-
+//
+//    }
     ASSERT(((unsigned long)p & (align - 1)) == 0);
     return p;
 }
@@ -732,32 +734,32 @@ void xfree(void *p)
 
     ASSERT(!in_irq());
 
+
     if ( !((unsigned long)p & (PAGE_SIZE - 1)) )
     {
+
+
         unsigned long size = PFN_ORDER(virt_to_page(p));
         unsigned int i, order = get_order_from_pages(size);
 
-	if(shadow_base){
-		printk("xfree %p of size %ld\n",p,size);
-
-//	    for(int i=0;i<size;i++){
-//		    int ord;
-//		    int*shadow_addr=(int*)mem_to_shadow(p+size,&ord);
-//		    if(!shadow_addr){
-//			    break;
+//	    if(xasan_flag){
+//		if(shadow_base){
+//		    int psize=size>>3;
+//		    for(int j=0;j<psize;j++){
+//			    int ord;
+//			    char*shadow_addr=(char*)mem_to_shadow(p+j,&ord);
+//			    if(shadow_addr){
+//				    if(ord>(*shadow_addr)){
+//					   e_trace.xasan_err_addr=p;
+//					   e_trace.xasan_err_size=0;
+//					   e_trace.xasan_err_type=1;
+//				    }
+//				    (*shadow_addr)--;
+//			    }
 //		    }
-//		    if(ord>(*shadow_addr)){
-//			   e_trace.xasan_err_addr=p;
-//			   e_trace.xasan_err_size=size;
-//			   e_trace.xasan_err_type=1;
-//			   return;
-//		    }
-//		    else{
-//			    (*shadow_addr)--;
-//		    }
+//
+//		}
 //	    }
-
-	}
 
         BUG_ON((unsigned long)p & ((PAGE_SIZE << order) - 1));
         PFN_ORDER(virt_to_page(p)) = 0;
