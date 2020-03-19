@@ -43,6 +43,7 @@ ALL_OBJS-$(CONFIG_CRYPTO)   += $(BASEDIR)/crypto/built_in.o
 
 # Initialise some variables
 CFLAGS_UBSAN :=
+LDFLAGS_UBSAN :=
 
 ifeq ($(CONFIG_DEBUG),y)
 CFLAGS += -O1
@@ -63,7 +64,7 @@ CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
 CFLAGS-$(CONFIG_DEBUG_INFO) += -g
 CFLAGS += '-D__OBJECT_FILE__="$@"'
 
-TFLAGS =  -fno-discard-value-names -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so
+TFLAGS =  -fno-discard-value-names -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/asan/build/skeleton/libSkeletonPass.so
 
 ifneq ($(clang),y)
 # Clang doesn't understand this command line argument, and doesn't appear to
@@ -147,6 +148,8 @@ CFLAGS_UBSAN += $(TFLAGS)
 # Any -fno-sanitize= options need to come after any -fsanitize= options
 $(filter-out %.init.o $(noubsan-y),$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
+
+
 endif
 
 ifeq ($(CONFIG_LTO),y)

@@ -12,6 +12,7 @@
 #include <xen/paging.h>
 #include <xen/guest_access.h>
 #include <xen/hypercall.h>
+#include <xen/xmalloc.h>
 #include <xsm/xsm.h>
 #include <asm/current.h>
 #include <public/version.h>
@@ -25,6 +26,79 @@ static const char __initconst opt_builtin_cmdline[] = CONFIG_CMDLINE;
 
 long long int fault_table=0;
 long long int fault_counter =0;
+void* shadow_base=0;
+int xasan_flag=0;
+struct err_trace e_trace = {.xasan_err_addr = 0, .xasan_err_size=0, .xasan_err_type =0, .xasan_trace[0 ... 19][0 ... 99]=0, .xasan_trace_pos=0};
+
+
+
+void enter_func(char* name){
+    if(xasan_flag==0)
+	    return;
+     int len=0;
+     while(1){
+	if(name[len]==0)
+		break;
+	len++;
+     }
+     memcpy(e_trace.xasan_trace[e_trace.xasan_trace_pos],name,len+1);
+     e_trace.xasan_trace_pos++;
+     e_trace.xasan_trace_pos=e_trace.xasan_trace_pos%20;
+}
+ 
+void leave_func(){
+    if(xasan_flag==0)
+	    return;
+    e_trace.xasan_trace_pos--;
+    if(e_trace.xasan_trace_pos<0)
+	    e_trace.xasan_trace_pos=19;
+    e_trace.xasan_trace[e_trace.xasan_trace_pos][0]=0;
+}
+
+
+void mark_valid(int64_t* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		(*shadow)=(*shadow)|(1<<ord);
+	}
+
+}
+void mark_invalid(int64_t* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		(*shadow)=(*shadow)&(~(1<<ord));
+	}
+}
+
+
+void report_xasan(int64_t* addr, int64_t size, int64_t type){
+    if(xasan_flag==0)
+	    return;
+
+    void* shadow;
+    int ord;
+    for(int i=0;i<size;i++){
+	shadow=mem_to_shadow(addr+i,&ord);
+	if(!shadow)
+		return;
+
+	char s=*(char*)shadow;
+	if(!(s&(1<<ord))){
+	    e_trace.xasan_err_addr=shadow;
+	    e_trace.xasan_err_size=size;
+	    e_trace.xasan_err_type=2;
+	    e_trace.xasan_ord=ord;
+	    e_trace.xasan_shadow=s;
+	    break;
+	}
+    }
+}
   
 int willInject(int uid){
    printk("%lld walk into fault: %d\n", fault_counter++, uid);

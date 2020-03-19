@@ -1747,11 +1747,42 @@ ret_t do_sched_op(int cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
 
 #ifndef COMPAT
 
+long do_get_trace(long long int trace){
+    struct err_trace *m_trace=(struct err_trace*) trace;
+    m_trace->xasan_err_addr = e_trace.xasan_err_addr;
+    m_trace->xasan_err_size = e_trace.xasan_err_size;
+    m_trace->xasan_err_type = e_trace.xasan_err_type;
+    m_trace->xasan_ord = e_trace.xasan_ord;
+    m_trace->xasan_shadow = e_trace.xasan_shadow;
+    m_trace->xasan_trace_pos=e_trace.xasan_trace_pos;
+    for(int i=0;i<20;i++){
+	memcpy(m_trace->xasan_trace[i], e_trace.xasan_trace[i],100);
+    }
+    return 0;
+}
+
+void func(int fault){
+	int a[10];
+	a[9-fault]=1;
+	*(a-1)=2;
+	printk("stack over flow: %p\n",a+9-fault);
+}
+
 long do_set_fault(long long int fault){
     printk("fault_table: %lld\n", fault_table);
     if(fault>=0)
 	    fault_table=fault;
     printk("fault_table new: %lld\n", fault_table);
+    if(fault==-1){
+	  xasan_flag = 1- xasan_flag;
+	  printk("set xasan_flag: %d\n", xasan_flag);
+    }
+     if(fault==-3){
+	     int a[10];
+	     printk("stack: %p\n",a);
+	     func(fault);
+    }
+
     return 0;
 }
 

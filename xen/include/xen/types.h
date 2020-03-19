@@ -55,8 +55,55 @@ typedef __u64 __be64;
 typedef unsigned int __attribute__((__mode__(__pointer__))) uintptr_t;
 
 int willInject(int uid);
+void report_xasan(int64_t* addr, int64_t size, int64_t type);
+void report_action(int64_t* addr, int64_t size, int64_t type);
+void mark_valid(int64_t* addr, int64_t size);
+void mark_invalid(int64_t* addr, int64_t size);
+
+void enter_func(char* name);
+void leave_func(void);
+
+
+struct err_trace
+{
+	void* xasan_err_addr;
+	int64_t xasan_err_size;
+	int xasan_err_type;
+	int xasan_ord;
+	int xasan_shadow;
+	char xasan_trace[20][100]; 
+	int xasan_trace_pos; 
+};
+
+
 extern long long int fault_table;
 extern long long int fault_counter;
+extern void* shadow_base;
+extern int xasan_flag;
+extern struct err_trace e_trace;
+
+inline void* mem_to_shadow(void * addr, int* ord){
+    int64_t* paddr;
+    void* shadow=0;
+    if(shadow_base){
+	paddr = addr  - 0xffff830130000000;
+	*ord=((int)paddr&7);
+	if((unsigned long)addr>(unsigned long)shadow_base+(GB(1)>>3)){
+		shadow = ((long)(paddr-(GB(1)>>3))>>3)+shadow_base;
+	}
+	else{
+		shadow = ((long)paddr>>3)+shadow_base;
+	}
+	if((unsigned long)shadow>(unsigned long)shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)shadow_base){
+		return 0;
+	}
+	return shadow;
+    }
+    else{
+	    return 0;
+    }
+}
+
 
 typedef bool bool_t;
 #define test_and_set_bool(b)   xchg(&(b), true)
