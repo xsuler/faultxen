@@ -639,7 +639,16 @@ void *_xmalloc(unsigned long size, unsigned long align)
     p = add_padding(p, align);
     if(!shadow_base ){
 	shadow_base=_xmalloc_c(GB(1));
-	memset(shadow_base,0xff,GB(1));
+	memset(shadow_base,0,GB(1));
+	struct err_trace e;
+	e.xasan_err_addr = 0;
+	e.xasan_err_size=0;
+	e.xasan_err_type =0;
+	e.xasan_trace_pos=0;
+	for(int i=0;i<20;i++){
+		e.id=i;
+		e_trace[i]=e;
+	}
     }
 //    if(xasan_flag){
 //	    int sizeb=size>>3;

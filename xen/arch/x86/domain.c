@@ -1461,9 +1461,9 @@ static void load_segments(struct vcpu *n)
 
         if ( is_pv_32bit_vcpu(n) )
         {
-            unsigned int *esp = ring_1(regs) ?
-                                (unsigned int *)regs->rsp :
-                                (unsigned int *)pv->kernel_sp;
+            unsigned long *esp = ring_1(regs) ?
+                                (unsigned long *)regs->rsp :
+                                (unsigned long *)pv->kernel_sp;
             int ret = 0;
 
             /* CS longword also contains full evtchn_upcall_mask. */

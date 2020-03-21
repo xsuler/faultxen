@@ -1,0 +1,27 @@
+./.version.o.tmp: version.c /root/faultxen/xen/include/xen/config.h \
+  /root/faultxen/xen/include/xen/kconfig.h \
+  /root/faultxen/xen/include/generated/autoconf.h \
+  /root/faultxen/xen/include/xen/compiler.h \
+  /root/faultxen/xen/include/asm/config.h \
+  /root/faultxen/xen/include/xen/const.h \
+  /root/faultxen/xen/include/xen/compile.h \
+  /root/faultxen/xen/include/xen/init.h \
+  /root/faultxen/xen/include/asm/init.h \
+  /root/faultxen/xen/include/xen/errno.h \
+  /root/faultxen/xen/include/public/errno.h \
+  /root/faultxen/xen/include/xen/lib.h \
+  /root/faultxen/xen/include/xen/inttypes.h \
+  /root/faultxen/xen/include/xen/types.h \
+  /root/faultxen/xen/include/xen/stdbool.h \
+  /root/faultxen/xen/include/asm/types.h \
+  /root/faultxen/xen/include/xen/stdarg.h \
+  /root/faultxen/xen/include/xen/xmalloc.h \
+  /root/faultxen/xen/include/xen/cache.h \
+  /root/faultxen/xen/include/asm/cache.h \
+  /root/faultxen/xen/include/xen/string.h \
+  /root/faultxen/xen/include/asm/string.h \
+  /root/faultxen/xen/include/asm/bug.h \
+  /root/faultxen/xen/include/xen/efi.h \
+  /root/faultxen/xen/include/xen/elf.h \
+  /root/faultxen/xen/include/xen/elfstructs.h \
+  /root/faultxen/xen/include/xen/version.h

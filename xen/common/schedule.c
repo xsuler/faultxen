@@ -1749,23 +1749,33 @@ ret_t do_sched_op(int cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
 
 long do_get_trace(long long int trace){
     struct err_trace *m_trace=(struct err_trace*) trace;
-    m_trace->xasan_err_addr = e_trace.xasan_err_addr;
-    m_trace->xasan_err_size = e_trace.xasan_err_size;
-    m_trace->xasan_err_type = e_trace.xasan_err_type;
-    m_trace->xasan_ord = e_trace.xasan_ord;
-    m_trace->xasan_shadow = e_trace.xasan_shadow;
-    m_trace->xasan_trace_pos=e_trace.xasan_trace_pos;
+    m_trace->xasan_err_addr = e_trace[m_trace->id].xasan_err_addr;
+    m_trace->xasan_err_size = e_trace[m_trace->id].xasan_err_size;
+    m_trace->xasan_err_type = e_trace[m_trace->id].xasan_err_type;
+    m_trace->xasan_ord = e_trace[m_trace->id].xasan_ord;
+    m_trace->xasan_shadow = e_trace[m_trace->id].xasan_shadow;
+    m_trace->xasan_trace_pos=e_trace[m_trace->id].xasan_trace_pos;
     for(int i=0;i<20;i++){
-	memcpy(m_trace->xasan_trace[i], e_trace.xasan_trace[i],100);
+	memcpy(m_trace->xasan_trace[i], e_trace[m_trace->id].xasan_trace[i],100);
     }
     return 0;
 }
 
 void func(int fault){
 	int a[10];
-	a[9-fault]=1;
-	*(a-1)=2;
-	printk("stack over flow: %p\n",a+9-fault);
+	a[8-fault]=1;
+	printk("stack over flow: %p\n",a+8-fault);
+}
+void funcr(int fault){
+	char a[4];
+	char b[4];
+	char c[4];
+	a[4-fault]=1;
+	printk("normal %p %p %p\n",a,b,c);
+	//printk("shadow a: %d %d %d %d %d %d\n",(int)(*(char*)mem_to_shadow(a-1,&ord)),(int)(*(char*)mem_to_shadow(a-2,&ord)),(int)(*(char*)mem_to_shadow(a+2,&ord)),(int)(*(char*)mem_to_shadow(a+3,&ord)),(int)(*(char*)mem_to_shadow(a+4,&ord)),(int)(*(char*)mem_to_shadow(a+5,&ord)));
+//	printk("shadow outofbound: %d \n",(int)(*(char*)mem_to_shadow(a+8-fault,&ord)));
+//	printk("shadow outofbound2: %d \n",(int)(*(char*)mem_to_shadow(a-2,&ord)));
+	printk("stack overflow: %p\n",a+8-fault);
 }
 
 long do_set_fault(long long int fault){
@@ -1777,11 +1787,13 @@ long do_set_fault(long long int fault){
 	  xasan_flag = 1- xasan_flag;
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
-     if(fault==-3){
-	     int a[10];
-	     printk("stack: %p\n",a);
+     if(fault<-1&&fault>=-5){
 	     func(fault);
     }
+     if(fault<-5){
+	     funcr(fault);
+    }
+
 
     return 0;
 }
