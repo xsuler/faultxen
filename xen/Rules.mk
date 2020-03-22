@@ -46,9 +46,9 @@ CFLAGS_UBSAN :=
 LDFLAGS_UBSAN :=
 
 ifeq ($(CONFIG_DEBUG),y)
-CFLAGS += -O0
+CFLAGS += -O1
 else
-CFLAGS += -O0
+CFLAGS += -O2
 endif
 
 ifeq ($(CONFIG_FRAME_POINTER),y)
@@ -146,9 +146,11 @@ endif
 ifeq ($(CONFIG_UBSAN),y)
 CFLAGS_UBSAN += $(TFLAGS)
 # Any -fno-sanitize= options need to come after any -fsanitize= options
-$(filter-out %.init.o $(noubsan-y),$(obj-y) $(obj-bin-y) $(extra-y)): \
+#$(filter-out %.init.o $(noubsan-y),$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
+$(filter-out %.init.o $(noubsan-y),schedule.o): \
+CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
 endif
 

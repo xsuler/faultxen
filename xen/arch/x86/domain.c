@@ -1461,9 +1461,9 @@ static void load_segments(struct vcpu *n)
 
         if ( is_pv_32bit_vcpu(n) )
         {
-            unsigned long *esp = ring_1(regs) ?
-                                (unsigned long *)regs->rsp :
-                                (unsigned long *)pv->kernel_sp;
+            unsigned int*esp = ring_1(regs) ?
+                                (unsigned int*)regs->rsp :
+                                (unsigned int*)pv->kernel_sp;
             int ret = 0;
 
             /* CS longword also contains full evtchn_upcall_mask. */
@@ -1483,7 +1483,7 @@ static void load_segments(struct vcpu *n)
                  put_user(regs->eip,           esp-3) |
                  put_user(uregs->gs,           esp-4) |
                  put_user(uregs->fs,           esp-5) |
-                 put_user(uregs->es,           esp-6) |
+                 put_user(uregs->es,           (uint16_t *)esp-6) |
                  put_user(uregs->ds,           esp-7) )
             {
                 gprintk(XENLOG_ERR,
