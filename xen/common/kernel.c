@@ -29,6 +29,7 @@ long long int fault_counter =0;
 void* shadow_base=0;
 int xasan_flag=0;
 int e_id=0;
+int size_flag=0;
 struct err_trace e_trace[20];
 
 void enter_func(char* name){

@@ -82,6 +82,7 @@ extern void* shadow_base;
 extern int xasan_flag;
 extern struct err_trace e_trace[20];
 extern int e_id;
+extern int size_flag;
 
 inline void* mem_to_shadow(void * addr, int* ord){
     int64_t* paddr;

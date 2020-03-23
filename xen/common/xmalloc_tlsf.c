@@ -455,6 +455,8 @@ void xmem_pool_free(void *ptr, struct xmem_pool *pool)
     spin_lock(&pool->lock);
     b->size |= FREE_BLOCK;
     pool->used_size -= (b->size & BLOCK_SIZE_MASK) + BHDR_OVERHEAD;
+
+
     b->ptr.free_ptr = (struct free_ptr) { NULL, NULL};
     tmp_b = GET_NEXT_BLOCK(b->ptr.buffer, b->size & BLOCK_SIZE_MASK);
     if ( tmp_b->size & FREE_BLOCK )
@@ -613,9 +615,12 @@ void *_xmalloc_c(unsigned long size)
     return p;
 }
 
+
 void *_xmalloc(unsigned long size, unsigned long align)
 {
     void *p = NULL;
+    unsigned long osize=size;
+    size+=16+16-size%16;
 
     ASSERT(!in_irq());
 
@@ -635,8 +640,10 @@ void *_xmalloc(unsigned long size, unsigned long align)
     if ( p == NULL )
         return xmalloc_whole_pages(size - align + MEM_ALIGN, align);
 
+
     /* Ad set dond alignment padding. */
     p = add_padding(p, align);
+
     if(!shadow_base ){
 	shadow_base=_xmalloc_c(GB(1));
 	memset(shadow_base,0,GB(1));
@@ -665,7 +672,14 @@ void *_xmalloc(unsigned long size, unsigned long align)
 //
 //    }
     ASSERT(((unsigned long)p & (align - 1)) == 0);
-    return p;
+
+    unsigned long* psz=(unsigned long*)p;
+    *psz=osize;
+    if(size_flag==1)
+	    printk("xmalloc size: %ld, addr: %p\n",osize,p+16);
+    mark_invalid(p,16);
+    mark_invalid(p+16+osize,16-osize%16);
+    return p+16;
 }
 
 void *_xzalloc(unsigned long size, unsigned long align)
@@ -741,6 +755,16 @@ void xfree(void *p)
     if ( p == NULL || p == ZERO_BLOCK_PTR )
         return;
 
+    p=p-16;
+    unsigned long* psz=(unsigned long*)p;
+    unsigned long psize=*psz;
+
+    if(size_flag==1)
+	    printk("xfree size: %ld, addr: %p\n",psize,p+16);
+
+    mark_valid(p,16);
+    mark_valid(p+16+psize,16-psize%16);
+
     ASSERT(!in_irq());
 
 
@@ -750,6 +774,7 @@ void xfree(void *p)
 
         unsigned long size = PFN_ORDER(virt_to_page(p));
         unsigned int i, order = get_order_from_pages(size);
+
 
 //	    if(xasan_flag){
 //		if(shadow_base){
@@ -787,4 +812,5 @@ void xfree(void *p)
     p = strip_padding(p);
 
     xmem_pool_free(p, xenpool);
+
 }

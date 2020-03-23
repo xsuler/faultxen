@@ -1778,11 +1778,18 @@ void funcr(int fault){
 	printk("stack overflow: %p\n",a+8-fault);
 }
 
+struct ff{
+	int a;
+	char b[10];
+};
+
 void funcl(int fault){
+
 	char* a=xmalloc(char);
 	char* b=xmalloc(char);
 	char* c=xmalloc(char);
-	*(a+1)=1;
+	(*(a+1))=0;
+
 	printk("normal %p %p %p\n",a,b,c);
 }
 
