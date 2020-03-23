@@ -1778,6 +1778,15 @@ void funcr(int fault){
 	printk("stack overflow: %p\n",a+8-fault);
 }
 
+void funcl(int fault){
+	char* a=xmalloc(char);
+	char* b=xmalloc(char);
+	char* c=xmalloc(char);
+	*(a+1)=1;
+	printk("normal %p %p %p\n",a,b,c);
+}
+
+
 long do_set_fault(long long int fault){
     printk("fault_table: %lld\n", fault_table);
     if(fault>=0)
@@ -1791,7 +1800,7 @@ long do_set_fault(long long int fault){
 	     func(fault);
     }
      if(fault<-5){
-	     funcr(fault);
+	     funcl(fault);
     }
 
 

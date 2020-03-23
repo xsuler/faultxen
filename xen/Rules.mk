@@ -149,7 +149,7 @@ CFLAGS_UBSAN += $(TFLAGS)
 #$(filter-out %.init.o $(noubsan-y),$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
-$(filter-out %.init.o $(noubsan-y),schedule.o): \
+$(filter-out %.init.o $(noubsan-y),schedule.o domain.o): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
 endif
