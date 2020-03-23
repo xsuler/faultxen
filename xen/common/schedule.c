@@ -1766,7 +1766,7 @@ void func(int fault){
 	a[8-fault]=1;
 	printk("stack over flow: %p\n",a+8-fault);
 }
-void funcr(int fault){
+void func_stack(int fault){
 	char a[4];
 	char b[4];
 	char c[4];
@@ -1778,12 +1778,7 @@ void funcr(int fault){
 	printk("stack overflow: %p\n",a+8-fault);
 }
 
-struct ff{
-	int a;
-	char b[10];
-};
-
-void funcl(int fault){
+void func_heap(int fault){
 
 	char* a=xmalloc(char);
 	char* b=xmalloc(char);
@@ -1793,6 +1788,22 @@ void funcl(int fault){
 	printk("normal %p %p %p\n",a,b,c);
 }
 
+void func_use_after_free(int fault){
+	char* a=xmalloc(char);
+	xfree(a);
+	*a=1;
+}
+
+char* uar;
+
+void func_use_after_return_claim(){
+	char x;
+	uar=&x;
+}
+void func_use_after_return(int fault){
+	func_use_after_return_claim();
+	*uar=1;
+}
 
 long do_set_fault(long long int fault){
     printk("fault_table: %lld\n", fault_table);
@@ -1803,13 +1814,18 @@ long do_set_fault(long long int fault){
 	  xasan_flag = 1- xasan_flag;
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
-     if(fault<-1&&fault>=-5){
-	     func(fault);
+     if(fault==-2){
+	     func_use_after_return(fault);
     }
-     if(fault<-5){
-	     funcl(fault);
+     if(fault==-3){
+	     func_use_after_free(fault);
     }
-
+     if(fault==-4){
+	     func_stack(fault);
+    }
+     if(fault==-5){
+	     func_heap(fault);
+    }
 
     return 0;
 }

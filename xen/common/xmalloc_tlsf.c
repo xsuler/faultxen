@@ -657,20 +657,6 @@ void *_xmalloc(unsigned long size, unsigned long align)
 		e_trace[i]=e;
 	}
     }
-//    if(xasan_flag){
-//	    int sizeb=size>>3;
-//	    for(int i=0;i<sizeb;i++){
-//		    int ord;
-//		    char*shadow_addr=(char*)mem_to_shadow(p+i,&ord);
-//		    if(!shadow_addr)
-//			    break;
-//		    (*shadow_addr)++;
-//		    if((*shadow_addr)>32||(*shadow_addr)<0||ord!=(*shadow_addr)){
-//			    printk("invalid shadow val: %d, ord: %d of addr %p",*(shadow_addr),ord,p);
-//		    }
-//	    }
-//
-//    }
     ASSERT(((unsigned long)p & (align - 1)) == 0);
 
     unsigned long* psz=(unsigned long*)p;
@@ -678,6 +664,7 @@ void *_xmalloc(unsigned long size, unsigned long align)
     if(size_flag==1)
 	    printk("xmalloc size: %ld, addr: %p\n",osize,p+16);
     mark_invalid(p,16);
+    mark_valid(p+16,osize);
     mark_invalid(p+16+osize,16-osize%16);
     return p+16;
 }
@@ -763,6 +750,7 @@ void xfree(void *p)
 	    printk("xfree size: %ld, addr: %p\n",psize,p+16);
 
     mark_valid(p,16);
+    mark_invalid(p+16,psize);
     mark_valid(p+16+psize,16-psize%16);
 
     ASSERT(!in_irq());
@@ -775,25 +763,6 @@ void xfree(void *p)
         unsigned long size = PFN_ORDER(virt_to_page(p));
         unsigned int i, order = get_order_from_pages(size);
 
-
-//	    if(xasan_flag){
-//		if(shadow_base){
-//		    int psize=size>>3;
-//		    for(int j=0;j<psize;j++){
-//			    int ord;
-//			    char*shadow_addr=(char*)mem_to_shadow(p+j,&ord);
-//			    if(shadow_addr){
-//				    if(ord>(*shadow_addr)){
-//					   e_trace.xasan_err_addr=p;
-//					   e_trace.xasan_err_size=0;
-//					   e_trace.xasan_err_type=1;
-//				    }
-//				    (*shadow_addr)--;
-//			    }
-//		    }
-//
-//		}
-//	    }
 
         BUG_ON((unsigned long)p & ((PAGE_SIZE << order) - 1));
         PFN_ORDER(virt_to_page(p)) = 0;
