@@ -160,6 +160,7 @@ struct sched_watchdog {
 typedef struct sched_watchdog sched_watchdog_t;
 DEFINE_XEN_GUEST_HANDLE(sched_watchdog_t);
 
+
 struct sched_pin_override {
     int32_t pcpu;
 };

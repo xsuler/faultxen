@@ -83,6 +83,7 @@ extern int xasan_flag;
 extern struct err_trace e_trace[20];
 extern int e_id;
 extern int size_flag;
+extern char ary[5];
 
 inline void* mem_to_shadow(void * addr, int* ord){
     int64_t* paddr;
@@ -108,7 +109,18 @@ inline void* mem_to_shadow(void * addr, int* ord){
 			return shadow;
 		}
 		else{
-			return 0;
+			if((unsigned long)addr>(unsigned long)0xffff82d080000000){
+				paddr = addr  - 0xffff82d080000000;
+				*ord=(int)(((int64_t)paddr)&7);
+				shadow = (((long)paddr)>>3)+shadow_base+2*0x1ffffff;
+				if((unsigned long)shadow>(unsigned long)shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)shadow_base){
+					return 0;
+				}
+				return shadow;
+			}
+			else{
+				return 0;
+			}
 		}
 	}
     }

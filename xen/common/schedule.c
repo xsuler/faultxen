@@ -1805,6 +1805,12 @@ void func_use_after_return(int fault){
 	*uar=1;
 }
 
+char ary[5]={0};
+void func_global(int fault){
+	ary[1-fault]=1;
+	printk("ary: %p: %d",ary,(int)ary[1-fault]);
+}
+
 long do_set_fault(long long int fault){
     printk("fault_table: %lld\n", fault_table);
     if(fault>=0)
@@ -1825,6 +1831,9 @@ long do_set_fault(long long int fault){
     }
      if(fault==-5){
 	     func_heap(fault);
+    }
+     if(fault==-6){
+	     func_global(fault);
     }
 
     return 0;
