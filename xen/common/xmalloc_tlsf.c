@@ -620,7 +620,7 @@ void *_xmalloc(unsigned long size, unsigned long align)
 {
     void *p = NULL;
     unsigned long osize=size;
-    size+=16+16-size%16;
+    size+=16+16+16-size%16;
 
     ASSERT(!in_irq());
 
@@ -663,10 +663,10 @@ void *_xmalloc(unsigned long size, unsigned long align)
     *psz=osize;
     if(size_flag==1)
 	    printk("xmalloc size: %ld, addr: %p\n",osize,p+16);
-    mark_invalid(p,16,0);
-    mark_valid(p+16,osize);
-    mark_invalid(p+16+osize,16-osize%16,0);
-    return p+16;
+    mark_invalid(p+16,16,120);
+    mark_valid(p+32,osize);
+    mark_invalid(p+32+osize,16-osize%16,120);
+    return p+32;
 }
 
 void *_xzalloc(unsigned long size, unsigned long align)
@@ -742,16 +742,16 @@ void xfree(void *p)
     if ( p == NULL || p == ZERO_BLOCK_PTR )
         return;
 
-    p=p-16;
+    p=p-32;
     unsigned long* psz=(unsigned long*)p;
     unsigned long psize=*psz;
 
     if(size_flag==1)
 	    printk("xfree size: %ld, addr: %p\n",psize,p+16);
 
-    mark_valid(p,16);
-    mark_invalid(p+16,psize,1);
-    mark_valid(p+16+psize,16-psize%16);
+    mark_valid(p+16,16);
+    mark_invalid(p+32,psize,121);
+    mark_valid(p+32+psize,16-psize%16);
 
     ASSERT(!in_irq());
 

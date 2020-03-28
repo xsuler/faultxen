@@ -1789,10 +1789,12 @@ void func_heap(int fault){
 }
 
 void func_use_after_free(int fault){
+	size_flag=1;
 	char* a=xmalloc(char);
-	printk("use after free %p\n",a);
 	xfree(a);
+	size_flag=0;
 	*a=1;
+	printk("%d",(int)*a);
 }
 
 char* uar;
@@ -1809,7 +1811,6 @@ void func_use_after_return(int fault){
 char ary[5]={0};
 void func_global(int fault){
 	ary[1-fault]=1;
-	printk("ary: %p: %d",ary,(int)ary[1-fault]);
 }
 
 long do_set_fault(long long int fault){

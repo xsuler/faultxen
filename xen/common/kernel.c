@@ -73,7 +73,7 @@ void mark_invalid(char* addr, int64_t size, char type){
 		if(!shadow)
 			return;
 		*shadow=(*shadow)|(1<<ord);
-		if(type>=0&&type<3)
+		if(type>=120&&type<123)
 			*(addr+i)=type;
 	}
 }
@@ -107,10 +107,7 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 	    e_trace[e_id].xasan_err_size=size;
 	    e_trace[e_id].is_write=type;
 
-	    if((*addr)>=0&&(*addr<3))
-		    e_trace[e_id].xasan_err_type=*addr;
-	    else
-		    e_trace[e_id].xasan_err_type=3;
+	    e_trace[e_id].xasan_err_type=*addr;
 	    e_trace[e_id].xasan_ord=ord;
 	    e_trace[e_id].xasan_shadow=s;
 	    e_id++;
