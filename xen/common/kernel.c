@@ -107,7 +107,7 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 	    e_trace[e_id].xasan_err_size=size;
 	    e_trace[e_id].is_write=type;
 
-	    if(*addr>=0&&*addr<3)
+	    if((*addr)>=0&&(*addr<3))
 		    e_trace[e_id].xasan_err_type=*addr;
 	    else
 		    e_trace[e_id].xasan_err_type=3;

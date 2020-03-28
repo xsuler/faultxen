@@ -1790,6 +1790,7 @@ void func_heap(int fault){
 
 void func_use_after_free(int fault){
 	char* a=xmalloc(char);
+	printk("use after free %p\n",a);
 	xfree(a);
 	*a=1;
 }
@@ -1826,7 +1827,7 @@ long do_set_fault(long long int fault){
      if(fault==-3){
 	     func_use_after_free(fault);
     }
-     if(fault==-4){
+    if(fault==-4){
 	     func_stack(fault);
     }
      if(fault==-5){
