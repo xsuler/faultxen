@@ -57,9 +57,9 @@ typedef unsigned int __attribute__((__mode__(__pointer__))) uintptr_t;
 int willInject(int uid);
 void report_xasan(char* addr, int64_t size, int64_t type);
 void mark_valid(char* addr, int64_t size);
-void mark_invalid(char* addr, int64_t size);
+void mark_invalid(char* addr, int64_t size, char type);
 
-void enter_func(char* name);
+void enter_func(char* name, char* file);
 void leave_func(void);
 
 
@@ -73,6 +73,7 @@ struct err_trace
 	int xasan_shadow;
 	char xasan_trace[20][100]; 
 	int xasan_trace_pos; 
+	int is_write;
 };
 
 

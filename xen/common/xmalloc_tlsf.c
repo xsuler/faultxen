@@ -663,9 +663,9 @@ void *_xmalloc(unsigned long size, unsigned long align)
     *psz=osize;
     if(size_flag==1)
 	    printk("xmalloc size: %ld, addr: %p\n",osize,p+16);
-    mark_invalid(p,16);
+    mark_invalid(p,16,0);
     mark_valid(p+16,osize);
-    mark_invalid(p+16+osize,16-osize%16);
+    mark_invalid(p+16+osize,16-osize%16,0);
     return p+16;
 }
 
@@ -750,7 +750,7 @@ void xfree(void *p)
 	    printk("xfree size: %ld, addr: %p\n",psize,p+16);
 
     mark_valid(p,16);
-    mark_invalid(p+16,psize);
+    mark_invalid(p+16,psize,1);
     mark_valid(p+16+psize,16-psize%16);
 
     ASSERT(!in_irq());

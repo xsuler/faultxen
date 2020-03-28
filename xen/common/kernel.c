@@ -32,8 +32,8 @@ int e_id=0;
 int size_flag=0;
 struct err_trace e_trace[20];
 
-void enter_func(char* name){
-    int len;
+void enter_func(char* name, char* file){
+    int len, lenf;
     if(xasan_flag==0)
             return;
      len=0;
@@ -42,7 +42,17 @@ void enter_func(char* name){
         	break;
         len++;
      }
+     lenf=0;
+     while(1){
+        if(file[lenf]==0)
+        	break;
+        lenf++;
+     }
+
      memcpy(e_trace[e_id].xasan_trace[e_trace[e_id].xasan_trace_pos],name,len+1);
+     memcpy((char*)e_trace[e_id].xasan_trace[e_trace[e_id].xasan_trace_pos]+len," : ",4);
+     memcpy((char*)e_trace[e_id].xasan_trace[e_trace[e_id].xasan_trace_pos]+len+3,file,lenf+1);
+
      e_trace[e_id].xasan_trace_pos++;
      e_trace[e_id].xasan_trace_pos=e_trace[e_id].xasan_trace_pos%20;
 }
@@ -56,13 +66,15 @@ void leave_func(){
     e_trace[e_id].xasan_trace[e_trace[e_id].xasan_trace_pos][0]=0;
 }
 
-void mark_invalid(char* addr, int64_t size){
+void mark_invalid(char* addr, int64_t size, char type){
 	int ord;
 	for(int i=0;i<size;i++){
 		char* shadow=(char*)mem_to_shadow(addr+i,&ord);
 		if(!shadow)
 			return;
 		*shadow=(*shadow)|(1<<ord);
+		if(type>=0&&type<3)
+			*(addr+i)=type;
 	}
 }
 
@@ -93,7 +105,12 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 	if((s&(1<<ord))){
 	    e_trace[e_id].xasan_err_addr=addr;
 	    e_trace[e_id].xasan_err_size=size;
-	    e_trace[e_id].xasan_err_type=2;
+	    e_trace[e_id].is_write=type;
+
+	    if(*addr>=0&&*addr<3)
+		    e_trace[e_id].xasan_err_type=*addr;
+	    else
+		    e_trace[e_id].xasan_err_type=3;
 	    e_trace[e_id].xasan_ord=ord;
 	    e_trace[e_id].xasan_shadow=s;
 	    e_id++;
