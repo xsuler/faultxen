@@ -1,1 +1,1 @@
-/root/xen-4.13.0/tools/qemu-xen/pc-bios/skiboot.lid
+/root/faultxen/tools/qemu-xen/pc-bios/skiboot.lid

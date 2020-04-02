@@ -4,5 +4,5 @@ TARGET_ARCH=ppc
 TARGET_WORDS_BIGENDIAN=yes
 CONFIG_USER_ONLY=yes
 CONFIG_LINUX_USER=yes
-TARGET_XML_FILES= /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/power-core.xml /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/power-fpu.xml /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/power-altivec.xml /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/power-spe.xml
+TARGET_XML_FILES= /root/faultxen/tools/qemu-xen-traditional/gdb-xml/power-core.xml /root/faultxen/tools/qemu-xen-traditional/gdb-xml/power-fpu.xml /root/faultxen/tools/qemu-xen-traditional/gdb-xml/power-altivec.xml /root/faultxen/tools/qemu-xen-traditional/gdb-xml/power-spe.xml
 CONFIG_SOFTFLOAT=yes

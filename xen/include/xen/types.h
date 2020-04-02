@@ -57,6 +57,8 @@ typedef unsigned int __attribute__((__mode__(__pointer__))) uintptr_t;
 int willInject(int uid);
 void report_xasan(char* addr, int64_t size, int64_t type);
 void mark_valid(char* addr, int64_t size);
+void mark_hp_flag(char* addr, int64_t size);
+void mark_hp_flag_r(char* addr, int64_t size);
 void mark_invalid(char* addr, int64_t size, char type);
 
 void enter_func(char* name, char* file);
@@ -78,13 +80,105 @@ struct err_trace
 
 
 extern long long int fault_table;
-extern long long int fault_counter;
+extern long long int fault_site;
 extern void* shadow_base;
+extern void* mem_shadow_base;
+extern void* hp_flag_shadow_base;
 extern int xasan_flag;
 extern struct err_trace e_trace[20];
 extern int e_id;
 extern int size_flag;
 extern char ary[5];
+
+inline void* mem_to_hp_flag_shadow(void * addr, int* ord){
+    int64_t* paddr;
+    void* shadow=0;
+    if(hp_flag_shadow_base){
+	if((unsigned long)addr>(unsigned long)0xffff830130000000){
+		paddr = addr  - 0xffff830130000000;
+		*ord=(int)(((int64_t)paddr)&7);
+		shadow = (((long)paddr)>>3)+hp_flag_shadow_base;
+		if((unsigned long)shadow>(unsigned long)hp_flag_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)hp_flag_shadow_base){
+			return 0;
+		}
+		return shadow;
+	}
+	else{
+		if((unsigned long)addr>(unsigned long)0xffff8300bf400000){
+			paddr = addr  - 0xffff8300bf400000;
+			*ord=(int)(((int64_t)paddr)&7);
+			shadow = (((long)paddr)>>3)+hp_flag_shadow_base+0x1ffffff;
+			if((unsigned long)shadow>(unsigned long)hp_flag_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)hp_flag_shadow_base){
+				return 0;
+			}
+			return shadow;
+		}
+		else{
+			if((unsigned long)addr>(unsigned long)0xffff82d080000000){
+				paddr = addr  - 0xffff82d080000000;
+				*ord=(int)(((int64_t)paddr)&7);
+				shadow = (((long)paddr)>>3)+hp_flag_shadow_base+2*0x1ffffff;
+				if((unsigned long)shadow>(unsigned long)hp_flag_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)hp_flag_shadow_base){
+					return 0;
+				}
+				return shadow;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+    }
+    else{
+	    return 0;
+    }
+}
+
+
+inline void* mem_to_mem_shadow(void * addr, int* ord){
+    int64_t* paddr;
+    void* shadow=0;
+    if(mem_shadow_base){
+	if((unsigned long)addr>(unsigned long)0xffff830130000000){
+		paddr = addr  - 0xffff830130000000;
+		*ord=(int)(((int64_t)paddr)&7);
+		shadow = (((long)paddr)>>3)+mem_shadow_base;
+		if((unsigned long)shadow>(unsigned long)mem_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)mem_shadow_base){
+			return 0;
+		}
+		return shadow;
+	}
+	else{
+		if((unsigned long)addr>(unsigned long)0xffff8300bf400000){
+			paddr = addr  - 0xffff8300bf400000;
+			*ord=(int)(((int64_t)paddr)&7);
+			shadow = (((long)paddr)>>3)+mem_shadow_base+0x1ffffff;
+			if((unsigned long)shadow>(unsigned long)mem_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)mem_shadow_base){
+				return 0;
+			}
+			return shadow;
+		}
+		else{
+			if((unsigned long)addr>(unsigned long)0xffff82d080000000){
+				paddr = addr  - 0xffff82d080000000;
+				*ord=(int)(((int64_t)paddr)&7);
+				shadow = (((long)paddr)>>3)+mem_shadow_base+2*0x1ffffff;
+				if((unsigned long)shadow>(unsigned long)mem_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)mem_shadow_base){
+					return 0;
+				}
+				return shadow;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+    }
+    else{
+	    return 0;
+    }
+}
+
 
 inline void* mem_to_shadow(void * addr, int* ord){
     int64_t* paddr;

@@ -25,8 +25,10 @@ xen_commandline_t saved_cmdline;
 static const char __initconst opt_builtin_cmdline[] = CONFIG_CMDLINE;
 
 long long int fault_table=0;
-long long int fault_counter =0;
+long long int fault_site=0;
 void* shadow_base=0;
+void* mem_shadow_base=0;
+void* hp_flag_shadow_base=0;
 int xasan_flag=0;
 int e_id=0;
 int size_flag=0;
@@ -66,6 +68,7 @@ void leave_func(){
     e_trace[e_id].xasan_trace[e_trace[e_id].xasan_trace_pos][0]=0;
 }
 
+
 void mark_invalid(char* addr, int64_t size, char type){
 	int ord;
 	for(int i=0;i<size;i++){
@@ -73,11 +76,29 @@ void mark_invalid(char* addr, int64_t size, char type){
 		if(!shadow)
 			return;
 		*shadow=(*shadow)|(1<<ord);
-		if(type>=120&&type<123)
+		if(type>=120&&type<124)
 			*(addr+i)=type;
 	}
 }
 
+void mark_hp_flag(char* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_hp_flag_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		*shadow=(*shadow)|(1<<ord);
+	}
+}
+void mark_hp_flag_r(char* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_hp_flag_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		*shadow=(*shadow)&(~(1<<ord));
+	}
+}
 void mark_valid(char* addr, int64_t size){
 	int ord;
 	for(int i=0;i<size;i++){
@@ -102,7 +123,7 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 		return;
 
 	s=*(char*)shadow;
-	if((s&(1<<ord))){
+	if((s&(1<<ord))&&(*addr==0||(*addr>=120&&*addr<124))){
 	    e_trace[e_id].xasan_err_addr=addr;
 	    e_trace[e_id].xasan_err_size=size;
 	    e_trace[e_id].is_write=type;
@@ -116,10 +137,44 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 	    break;
 	}
     }
+
+       for(int i=0;i<size;i++){
+
+	shadow=mem_to_hp_flag_shadow(addr+i,&ord);
+	s=*(char*)shadow;
+	if(!(s&(1<<ord)))
+		continue;
+
+	shadow=mem_to_mem_shadow(addr+i,&ord);
+	if(!shadow)
+		return;
+
+	s=*(char*)shadow;
+	if(type==1){
+		//write
+		char* as=(char*)shadow;
+		*as=s|(1<<ord);
+	}
+	if(type==0){
+		if(!(s&(1<<ord))){
+		    e_trace[e_id].xasan_err_addr=addr;
+		    e_trace[e_id].xasan_err_size=size;
+		    e_trace[e_id].is_write=type;
+
+		    e_trace[e_id].xasan_err_type=124;
+		    e_trace[e_id].xasan_ord=ord;
+		    e_trace[e_id].xasan_shadow=s;
+		    e_id++;
+		    if(e_id==20)
+			    e_id=0;
+		    break;
+		}
+	}
+    }
 }
   
 int willInject(int uid){
-   printk("%lld walk into fault: %d\n", fault_counter++, uid);
+   fault_site=fault_site|(1<<uid);
    return  (fault_table>>uid)&1;
 }
 

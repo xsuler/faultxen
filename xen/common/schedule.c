@@ -1747,6 +1747,12 @@ ret_t do_sched_op(int cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
 
 #ifndef COMPAT
 
+long do_get_site(long long int p){
+    long long int* ptr=(long long int*)p;
+    *ptr=fault_site;
+    printk("get fault site: %lld\n",fault_site);
+    return 0;
+}
 long do_get_trace(long long int trace){
     struct err_trace *m_trace=(struct err_trace*) trace;
     m_trace->xasan_err_addr = e_trace[m_trace->id].xasan_err_addr;
@@ -1760,22 +1766,23 @@ long do_get_trace(long long int trace){
     }
     return 0;
 }
+int rr;
 
-void func(int fault){
-	int a[10];
-	a[8-fault]=1;
-	printk("stack over flow: %p\n",a+8-fault);
+void func_umr_global(int fault){
+	printk("umr_global: %d",rr);		
 }
+
+
+void func_umr_malloc(int fault){
+	char* aa=xmalloc(char);
+	printk("umr malloc: %d",*aa);		
+}
+
 void func_stack(int fault){
 	char a[4];
 	char b[4];
-	char c[4];
 	a[4-fault]=1;
-	printk("normal %p %p %p\n",a,b,c);
-	//printk("shadow a: %d %d %d %d %d %d\n",(int)(*(char*)mem_to_shadow(a-1,&ord)),(int)(*(char*)mem_to_shadow(a-2,&ord)),(int)(*(char*)mem_to_shadow(a+2,&ord)),(int)(*(char*)mem_to_shadow(a+3,&ord)),(int)(*(char*)mem_to_shadow(a+4,&ord)),(int)(*(char*)mem_to_shadow(a+5,&ord)));
-//	printk("shadow outofbound: %d \n",(int)(*(char*)mem_to_shadow(a+8-fault,&ord)));
-//	printk("shadow outofbound2: %d \n",(int)(*(char*)mem_to_shadow(a-2,&ord)));
-	printk("stack overflow: %p\n",a+8-fault);
+	printk("stack over flow: %p %p\n",a+4-fault,b);
 }
 
 void func_heap(int fault){
@@ -1814,17 +1821,27 @@ void func_global(int fault){
 }
 
 long do_set_fault(long long int fault){
-    printk("fault_table: %lld\n", fault_table);
-    if(fault>=0)
+    if(fault>=0){
+	    printk("fault_table: %lld\n", fault_table);
 	    fault_table=fault;
-    printk("fault_table new: %lld\n", fault_table);
+	    printk("fault_table new: %lld\n", fault_table);
+    }
     if(fault==-1){
-	  xasan_flag = 1- xasan_flag;
+	  xasan_flag = 1;
 	  printk("set xasan_flag: %d\n", xasan_flag);
     }
      if(fault==-2){
-	     func_use_after_return(fault);
+	  fault_site = 0;
+	  printk("reset fault_site: %lld\n", fault_site);
     }
+     if(fault==-7){
+	     if(1)
+		     goto fail;
+fail:
+	     printk("enter this fault\n");
+
+    }
+
      if(fault==-3){
 	     func_use_after_free(fault);
     }
@@ -1837,6 +1854,16 @@ long do_set_fault(long long int fault){
      if(fault==-6){
 	     func_global(fault);
     }
+     if(fault==-8){
+	func_use_after_return(fault);
+    }
+     if(fault==-9){
+	func_umr_global(fault);
+    }
+     if(fault==-10){
+	func_umr_malloc(fault);
+    }
+
 
     return 0;
 }

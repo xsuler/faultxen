@@ -77,6 +77,10 @@ do_get_trace(
     long long int v);
 
 extern long
+do_get_site(
+    long long int v);
+
+extern long
 do_set_timer_op(
     s_time_t timeout);
 
@@ -197,6 +201,11 @@ compat_set_timer_op(
 
 extern int
 compat_set_fault(
+    u32 lo,
+    s32 hi);
+
+extern int
+compat_get_site(
     u32 lo,
     s32 hi);
 

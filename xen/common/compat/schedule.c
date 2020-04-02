@@ -43,10 +43,14 @@ int compat_set_fault(u32 lo, s32 hi)
 {
     return do_set_fault(((s64)hi << 32) | lo);
 }
-
 int compat_get_trace(u32 lo, s32 hi)
 {
     return do_get_trace(((s64)hi << 32) | lo);
+}
+
+int compat_get_site(u32 lo, s32 hi)
+{
+    return do_get_site(((s64)hi << 32) | lo);
 }
 
 int compat_set_timer_op(u32 lo, s32 hi)

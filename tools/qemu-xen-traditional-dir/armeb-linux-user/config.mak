@@ -4,6 +4,6 @@ TARGET_ARCH=arm
 TARGET_WORDS_BIGENDIAN=yes
 CONFIG_USER_ONLY=yes
 CONFIG_LINUX_USER=yes
-TARGET_XML_FILES= /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/arm-core.xml /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/arm-vfp.xml /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/arm-vfp3.xml /root/xen-4.13.0/tools/qemu-xen-traditional/gdb-xml/arm-neon.xml
+TARGET_XML_FILES= /root/faultxen/tools/qemu-xen-traditional/gdb-xml/arm-core.xml /root/faultxen/tools/qemu-xen-traditional/gdb-xml/arm-vfp.xml /root/faultxen/tools/qemu-xen-traditional/gdb-xml/arm-vfp3.xml /root/faultxen/tools/qemu-xen-traditional/gdb-xml/arm-neon.xml
 CONFIG_SOFTFLOAT=yes
 TARGET_HAS_BFLT=yes

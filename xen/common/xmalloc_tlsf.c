@@ -618,8 +618,11 @@ void *_xmalloc_c(unsigned long size)
 
 void *_xmalloc(unsigned long size, unsigned long align)
 {
+
+    struct err_trace e;
     void *p = NULL;
     unsigned long osize=size;
+    unsigned long* psz;
     size+=16+16+16-size%16;
 
     ASSERT(!in_irq());
@@ -645,9 +648,15 @@ void *_xmalloc(unsigned long size, unsigned long align)
     p = add_padding(p, align);
 
     if(!shadow_base ){
-	shadow_base=_xmalloc_c(GB(1));
-	memset(shadow_base,0,GB(1));
-	struct err_trace e;
+	hp_flag_shadow_base=_xmalloc_c(GB(1)>>3);
+	memset(hp_flag_shadow_base,0,GB(1)>>3);
+
+	mem_shadow_base=_xmalloc_c(GB(1)>>3);
+	memset(mem_shadow_base,0,GB(1)>>3);
+
+	shadow_base=_xmalloc_c(GB(1)>>3);
+	memset(shadow_base,0,GB(1)>>3);
+
 	e.xasan_err_addr = 0;
 	e.xasan_err_size=0;
 	e.xasan_err_type =0;
@@ -659,17 +668,18 @@ void *_xmalloc(unsigned long size, unsigned long align)
     }
     ASSERT(((unsigned long)p & (align - 1)) == 0);
 
-    unsigned long* psz=(unsigned long*)p;
+    psz=(unsigned long*)p;
     *psz=osize;
     if(size_flag==1)
 	    printk("xmalloc size: %ld, addr: %p\n",osize,p+16);
     mark_invalid(p+16,16,120);
     mark_valid(p+32,osize);
+
+    if(xasan_flag)
+	    mark_hp_flag(p+32,osize);
     mark_invalid(p+32+osize,16-osize%16,120);
     return p+32;
-}
-
-void *_xzalloc(unsigned long size, unsigned long align)
+} void *_xzalloc(unsigned long size, unsigned long align)
 {
     void *p = _xmalloc(size, align);
 
@@ -739,18 +749,24 @@ void *_xrealloc(void *ptr, unsigned long size, unsigned long align)
 
 void xfree(void *p)
 {
+    unsigned long* psz;
+    unsigned long psize;
+    unsigned long size;
+    unsigned int i;
+    unsigned int order;
     if ( p == NULL || p == ZERO_BLOCK_PTR )
         return;
 
     p=p-32;
-    unsigned long* psz=(unsigned long*)p;
-    unsigned long psize=*psz;
+    psz=(unsigned long*)p;
+    psize=*psz;
 
     if(size_flag==1)
 	    printk("xfree size: %ld, addr: %p\n",psize,p+16);
 
     mark_valid(p+16,16);
     mark_invalid(p+32,psize,121);
+    mark_hp_flag_r(p+32,psize);
     mark_valid(p+32+psize,16-psize%16);
 
     ASSERT(!in_irq());
@@ -760,8 +776,8 @@ void xfree(void *p)
     {
 
 
-        unsigned long size = PFN_ORDER(virt_to_page(p));
-        unsigned int i, order = get_order_from_pages(size);
+        size = PFN_ORDER(virt_to_page(p));
+        order = get_order_from_pages(size);
 
 
         BUG_ON((unsigned long)p & ((PAGE_SIZE << order) - 1));

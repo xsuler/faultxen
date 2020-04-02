@@ -133,6 +133,7 @@ static const hypercall_table_t hvm_hypercall_table[] = {
     COMPAT_CALL(set_timer_op),
     COMPAT_CALL(set_fault),
     COMPAT_CALL(get_trace),
+    COMPAT_CALL(get_site),
     HYPERCALL(xsm_op),
     HYPERCALL(hvm_op),
     HYPERCALL(sysctl),

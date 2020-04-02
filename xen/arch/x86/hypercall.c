@@ -45,6 +45,7 @@ const hypercall_args_t hypercall_args_table[NR_hypercalls] =
     COMP(set_timer_op, 1, 2),
     COMP(set_fault, 1, 2),
     COMP(get_trace, 1, 2),
+    COMP(get_site, 1, 2),
     ARGS(event_channel_op_compat, 1),
     ARGS(xen_version, 2),
     ARGS(console_io, 3),
