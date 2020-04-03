@@ -1835,9 +1835,12 @@ long do_set_fault(long long int fault){
 	  printk("reset fault_site: %lld\n", fault_site);
     }
      if(fault==-7){
-	     if(1)
+	     if(fault>0)
 		     goto fail;
+	     else
+		     return 0;
 fail:
+	     func_stack(fault);
 	     printk("enter this fault\n");
 
     }

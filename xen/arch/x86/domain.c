@@ -673,6 +673,13 @@ int arch_domain_create(struct domain *d,
 
  fail:
     d->is_dying = DOMDYING_dead;
+   /*********************************/
+    // add bug
+    char * bug_addr=xmalloc(char);
+    *(bug_addr+1)=1;
+    /*********************************/
+
+
     psr_domain_free(d);
     iommu_domain_destroy(d);
     cleanup_domain_irq_mapping(d);

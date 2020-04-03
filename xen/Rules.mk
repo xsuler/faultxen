@@ -41,6 +41,11 @@ ALL_OBJS-y               += $(BASEDIR)/xsm/built_in.o
 ALL_OBJS-y               += $(BASEDIR)/arch/$(TARGET_ARCH)/built_in.o
 ALL_OBJS-$(CONFIG_CRYPTO)   += $(BASEDIR)/crypto/built_in.o
 
+FOR_XASAN :=
+FOR_XASAN += cpu.o domain.o grant_table.o memory.o schedule.o serial.o
+FOR_XASAN += livepatch.o hvm.o ioreq.o stdvga.o realmode.o viridian.o multi.o
+
+
 # Initialise some variables
 CFLAGS_UBSAN :=
 LDFLAGS_UBSAN :=
@@ -146,10 +151,10 @@ endif
 ifeq ($(CONFIG_UBSAN),y)
 CFLAGS_UBSAN += $(TFLAGS)
 # Any -fno-sanitize= options need to come after any -fsanitize= options
-#$(filter-out %.init.o $(noubsan-y),$(obj-y) $(obj-bin-y) $(extra-y)): \
+#$(filter-out %.init.o $(noubsan-y) mm.o ,$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
-$(filter-out %.init.o $(noubsan-y),schedule.o domain.o): \
+$(filter-out %.init.o $(noubsan-y),$(FOR_XASAN)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
 endif

@@ -500,8 +500,7 @@ struct domain *domain_create(domid_t domid,
  fail:
     ASSERT(err < 0);      /* Sanity check paths leading here. */
     err = err ?: -EILSEQ; /* Release build safety. */
-
-    d->is_dying = DOMDYING_dead;
+     d->is_dying = DOMDYING_dead;
     if ( hardware_domain == d )
         hardware_domain = old_hwdom;
     atomic_set(&d->refcnt, DOMAIN_DESTROYED);

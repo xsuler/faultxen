@@ -34,6 +34,142 @@ int e_id=0;
 int size_flag=0;
 struct err_trace e_trace[20];
 
+
+void* mem_to_hp_flag_shadow(void * addr, int* ord){
+    int64_t* paddr;
+    void* shadow=0;
+    if(hp_flag_shadow_base){
+	if((unsigned long)addr>(unsigned long)0xffff830130000000){
+		paddr = addr  - 0xffff830130000000;
+		*ord=(int)(((int64_t)paddr)&7);
+		shadow = (((long)paddr)>>3)+hp_flag_shadow_base;
+		if((unsigned long)shadow>(unsigned long)hp_flag_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)hp_flag_shadow_base){
+			return 0;
+		}
+		return shadow;
+	}
+	else{
+		if((unsigned long)addr>(unsigned long)0xffff8300bf400000){
+			paddr = addr  - 0xffff8300bf400000;
+			*ord=(int)(((int64_t)paddr)&7);
+			shadow = (((long)paddr)>>3)+hp_flag_shadow_base+0x1ffffff;
+			if((unsigned long)shadow>(unsigned long)hp_flag_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)hp_flag_shadow_base){
+				return 0;
+			}
+			return shadow;
+		}
+		else{
+			if((unsigned long)addr>(unsigned long)0xffff82d080000000){
+				paddr = addr  - 0xffff82d080000000;
+				*ord=(int)(((int64_t)paddr)&7);
+				shadow = (((long)paddr)>>3)+hp_flag_shadow_base+2*0x1ffffff;
+				if((unsigned long)shadow>(unsigned long)hp_flag_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)hp_flag_shadow_base){
+					return 0;
+				}
+				return shadow;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+    }
+    else{
+	    return 0;
+    }
+}
+
+void* mem_to_mem_shadow(void * addr, int* ord){
+    int64_t* paddr;
+    void* shadow=0;
+    if(mem_shadow_base){
+	if((unsigned long)addr>(unsigned long)0xffff830130000000){
+		paddr = addr  - 0xffff830130000000;
+		*ord=(int)(((int64_t)paddr)&7);
+		shadow = (((long)paddr)>>3)+mem_shadow_base;
+		if((unsigned long)shadow>(unsigned long)mem_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)mem_shadow_base){
+			return 0;
+		}
+		return shadow;
+	}
+	else{
+		if((unsigned long)addr>(unsigned long)0xffff8300bf400000){
+			paddr = addr  - 0xffff8300bf400000;
+			*ord=(int)(((int64_t)paddr)&7);
+			shadow = (((long)paddr)>>3)+mem_shadow_base+0x1ffffff;
+			if((unsigned long)shadow>(unsigned long)mem_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)mem_shadow_base){
+				return 0;
+			}
+			return shadow;
+		}
+		else{
+			if((unsigned long)addr>(unsigned long)0xffff82d080000000){
+				paddr = addr  - 0xffff82d080000000;
+				*ord=(int)(((int64_t)paddr)&7);
+				shadow = (((long)paddr)>>3)+mem_shadow_base+2*0x1ffffff;
+				if((unsigned long)shadow>(unsigned long)mem_shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)mem_shadow_base){
+					return 0;
+				}
+				return shadow;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+    }
+    else{
+	    return 0;
+    }
+}
+
+void* mem_to_shadow(void * addr, int* ord){
+    int64_t* paddr;
+    void* shadow=0;
+    if(shadow_base){
+	if((unsigned long)addr>(unsigned long)0xffff830130000000){
+		paddr = addr  - 0xffff830130000000;
+		*ord=(int)(((int64_t)paddr)&7);
+		shadow = (((long)paddr)>>3)+shadow_base;
+		if((unsigned long)shadow>(unsigned long)shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)shadow_base){
+			return 0;
+		}
+		return shadow;
+	}
+	else{
+		if((unsigned long)addr>(unsigned long)0xffff8300bf400000){
+			paddr = addr  - 0xffff8300bf400000;
+			*ord=(int)(((int64_t)paddr)&7);
+			shadow = (((long)paddr)>>3)+shadow_base+0x1ffffff;
+			if((unsigned long)shadow>(unsigned long)shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)shadow_base){
+				return 0;
+			}
+			return shadow;
+		}
+		else{
+			if((unsigned long)addr>(unsigned long)0xffff82d080000000){
+				paddr = addr  - 0xffff82d080000000;
+				*ord=(int)(((int64_t)paddr)&7);
+				shadow = (((long)paddr)>>3)+shadow_base+2*0x1ffffff;
+				if((unsigned long)shadow>(unsigned long)shadow_base+(GB(1)>>3)||(unsigned long)shadow<(unsigned long)shadow_base){
+					return 0;
+				}
+				return shadow;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+    }
+    else{
+	    return 0;
+    }
+}
+
+
+
+
 void enter_func(char* name, char* file){
     int len, lenf;
     if(xasan_flag==0)
@@ -138,7 +274,7 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 	}
     }
 
-       for(int i=0;i<size;i++){
+    for(int i=0;i<size;i++){
 
 	shadow=mem_to_hp_flag_shadow(addr+i,&ord);
 	s=*(char*)shadow;
