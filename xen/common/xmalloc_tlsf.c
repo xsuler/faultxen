@@ -764,9 +764,26 @@ void xfree(void *p)
     if(size_flag==1)
 	    printk("xfree size: %ld, addr: %p\n",psize,p+16);
 
+    int ord;
+    char* shadow=(char*)mem_to_shadow(p+32,&ord);
+    if((*shadow)&(1<<ord)){
+        e_trace[e_id].xasan_err_addr=p+32;
+        e_trace[e_id].xasan_err_size=psize;
+        e_trace[e_id].is_write=0;
+     
+        e_trace[e_id].xasan_err_type=119;
+        e_trace[e_id].xasan_ord=ord;
+        e_id++;
+        if(e_id==20)
+     	   e_id=0;
+     
+	return;
+    }
+
     mark_valid(p+16,16);
     mark_invalid(p+32,psize,121);
     mark_hp_flag_r(p+32,psize);
+    mark_write_flag_r(p+32,psize);
     mark_valid(p+32+psize,16-psize%16);
 
     ASSERT(!in_irq());

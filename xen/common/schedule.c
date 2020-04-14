@@ -1768,8 +1768,10 @@ long do_get_trace(long long int trace){
 }
 int rr;
 
-void func_umr_global(int fault){
-	printk("umr_global: %d",rr);		
+void func_umr_stack(int fault){
+	int a[10];
+	a[0]=1;
+	printk("umr stack: %d\n",a[-fault]);
 }
 
 
@@ -1819,6 +1821,11 @@ char ary[5]={0};
 void func_global(int fault){
 	ary[1-fault]=1;
 }
+void func_df(int fault){
+	char* a=xmalloc(char);
+	xfree(a);
+	xfree(a);
+}
 
 long do_set_fault(long long int fault){
     if(fault>=0){
@@ -1861,10 +1868,13 @@ fail:
 	func_use_after_return(fault);
     }
      if(fault==-9){
-	func_umr_global(fault);
+	func_umr_stack(fault);
     }
      if(fault==-10){
 	func_umr_malloc(fault);
+    }
+     if(fault==-11){
+	func_df(fault);
     }
 
 

@@ -168,8 +168,6 @@ void* mem_to_shadow(void * addr, int* ord){
 }
 
 
-
-
 void enter_func(char* name, char* file){
     int len, lenf;
     if(xasan_flag==0)
@@ -200,7 +198,7 @@ void leave_func(){
             return;
     e_trace[e_id].xasan_trace_pos--;
     if(e_trace[e_id].xasan_trace_pos<0)
-            e_trace[e_id].xasan_trace_pos=19;
+            e_trace[e_id].xasan_trace_pos=0;
     e_trace[e_id].xasan_trace[e_trace[e_id].xasan_trace_pos][0]=0;
 }
 
@@ -216,7 +214,15 @@ void mark_invalid(char* addr, int64_t size, char type){
 			*(addr+i)=type;
 	}
 }
-
+void mark_valid(char* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		*shadow=(*shadow)&(~(1<<ord));
+	}
+}
 void mark_hp_flag(char* addr, int64_t size){
 	int ord;
 	for(int i=0;i<size;i++){
@@ -226,6 +232,7 @@ void mark_hp_flag(char* addr, int64_t size){
 		*shadow=(*shadow)|(1<<ord);
 	}
 }
+
 void mark_hp_flag_r(char* addr, int64_t size){
 	int ord;
 	for(int i=0;i<size;i++){
@@ -235,10 +242,21 @@ void mark_hp_flag_r(char* addr, int64_t size){
 		*shadow=(*shadow)&(~(1<<ord));
 	}
 }
-void mark_valid(char* addr, int64_t size){
+
+void mark_write_flag(char* addr, int64_t size){
 	int ord;
 	for(int i=0;i<size;i++){
-		char* shadow=(char*)mem_to_shadow(addr+i,&ord);
+		char* shadow=(char*)mem_to_mem_shadow(addr+i,&ord);
+		if(!shadow)
+			return;
+		*shadow=(*shadow)|(1<<ord);
+	}
+}
+
+void mark_write_flag_r(char* addr, int64_t size){
+	int ord;
+	for(int i=0;i<size;i++){
+		char* shadow=(char*)mem_to_mem_shadow(addr+i,&ord);
 		if(!shadow)
 			return;
 		*shadow=(*shadow)&(~(1<<ord));

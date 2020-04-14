@@ -61,6 +61,8 @@ void mark_init_global(char* addr, int64_t size, int64_t hasInit);
 void mark_hp_flag(char* addr, int64_t size);
 void mark_hp_flag_r(char* addr, int64_t size);
 void mark_invalid(char* addr, int64_t size, char type);
+void mark_write_flag(char* addr, int64_t size);
+void mark_write_flag_r(char* addr, int64_t size);
 
 void enter_func(char* name, char* file);
 void leave_func(void);
