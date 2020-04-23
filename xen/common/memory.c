@@ -777,6 +777,9 @@ static long memory_exchange(XEN_GUEST_HANDLE_PARAM(xen_memory_exchange_t) arg)
      * fails again, we're on the hook for freeing the page, since we've already
      * cleared PGC_allocated.
      */
+
+    //add by sule
+    fault_func_l1();
     while ( (page = page_list_remove_head(&in_chunk_list)) )
         if ( assign_pages(d, page, 0, MEMF_no_refcount) )
         {

@@ -121,6 +121,8 @@ int cpu_down(unsigned int cpu)
     return 0;
 
  fail:
+    //add by sule
+    fault_func_l1();
     cpu_notifier_call_chain(cpu, CPU_DOWN_FAILED, &nb, true);
  out:
     cpu_hotplug_done();
@@ -159,6 +161,8 @@ int cpu_up(unsigned int cpu)
     return 0;
 
  fail:
+    //add by sule
+    fault_func_l1();
     cpu_notifier_call_chain(cpu, CPU_UP_CANCELED, &nb, true);
  out:
     cpu_hotplug_done();

@@ -1827,6 +1827,38 @@ void func_df(int fault){
 	xfree(a);
 }
 
+void func_fail_l2(int fault){
+     if(fault>0)
+	     goto fail;
+     else
+	     return;
+fail:
+     func_use_after_free(fault);
+
+}
+
+
+void func_fail_l1(int fault){
+     if(fault>0)
+	     goto fail;
+     else
+	     return;
+fail:
+     func_fail_l2(fault);
+
+}
+
+
+void func_fail_l0(int fault){
+     if(fault>0)
+	     goto fail;
+     else
+	     return;
+fail:
+     func_fail_l1(fault);
+
+}
+
 long do_set_fault(long long int fault){
     if(fault>=0){
 	    printk("fault_table: %lld\n", fault_table);
@@ -1840,16 +1872,6 @@ long do_set_fault(long long int fault){
      if(fault==-2){
 	  fault_site = 0;
 	  printk("reset fault_site: %lld\n", fault_site);
-    }
-     if(fault==-7){
-	     if(fault>0)
-		     goto fail;
-	     else
-		     return 0;
-fail:
-	     func_stack(fault);
-	     printk("enter this fault\n");
-
     }
 
      if(fault==-3){
@@ -1876,6 +1898,15 @@ fail:
      if(fault==-11){
 	func_df(fault);
     }
+     if(fault==-12){
+	     if(fault>0)
+		     goto fail;
+	     else
+		     return 0;
+fail:
+	     func_fail_l0(fault);
+
+     }
 
 
     return 0;

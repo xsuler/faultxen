@@ -245,6 +245,8 @@ static unsigned int stdvga_mem_offset(
     return offset;
 
  fail:
+    //add by sule
+    fault_func_l1();
     return ~0u;
 }
 

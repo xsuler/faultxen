@@ -54,6 +54,8 @@ typedef __u64 __be64;
 
 typedef unsigned int __attribute__((__mode__(__pointer__))) uintptr_t;
 
+void fault_func_l1(void);
+
 int willInject(int uid);
 void report_xasan(char* addr, int64_t size, int64_t type);
 void mark_valid(char* addr, int64_t size);

@@ -670,8 +670,6 @@ void *_xmalloc(unsigned long size, unsigned long align)
 
     psz=(unsigned long*)p;
     *psz=osize;
-    if(size_flag==1)
-	    printk("xmalloc size: %ld, addr: %p\n",osize,p+16);
     mark_invalid(p+16,16,120);
     mark_valid(p+32,osize);
 
@@ -761,8 +759,6 @@ void xfree(void *p)
     psz=(unsigned long*)p;
     psize=*psz;
 
-    if(size_flag==1)
-	    printk("xfree size: %ld, addr: %p\n",psize,p+16);
 
     int ord;
     char* shadow=(char*)mem_to_shadow(p+32,&ord);

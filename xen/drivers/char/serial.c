@@ -352,6 +352,8 @@ int __init serial_parse_handle(char *conf)
     return handle | flags | SERHND_COOKED;
 
  fail:
+    //add by sule
+    fault_func_l1();
     return -1;
 }
 
@@ -393,6 +395,8 @@ void __init serial_set_rx_handler(int handle, serial_rx_fn fn)
     return;
 
  fail:
+    //add by sule
+    fault_func_l1();
     spin_unlock_irqrestore(&port->rx_lock, flags);
     printk("ERROR: Conflicting receive handlers for COM%d\n", 
            handle & SERHND_IDX);

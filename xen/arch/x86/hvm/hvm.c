@@ -709,6 +709,8 @@ int hvm_domain_initialise(struct domain *d)
     hvm_destroy_cacheattr_region_list(d);
     destroy_perdomain_mapping(d, PERDOMAIN_VIRT_START, 0);
  fail:
+    //add by sule
+    fault_func_l1();
     viridian_domain_deinit(d);
     return rc;
 }
@@ -2724,6 +2726,8 @@ static void *hvm_map_entry(unsigned long va, bool_t *writable)
     return v + (va & ~PAGE_MASK);
 
  fail:
+    //add by sule
+    fault_func_l1();
     domain_crash(current->domain);
     return NULL;
 }

@@ -498,6 +498,9 @@ struct domain *domain_create(domid_t domid,
     return d;
 
  fail:
+    //add by sule
+    fault_func_l1();
+
     ASSERT(err < 0);      /* Sanity check paths leading here. */
     err = err ?: -EILSEQ; /* Release build safety. */
      d->is_dying = DOMDYING_dead;

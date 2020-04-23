@@ -50,6 +50,8 @@ int arch_livepatch_safety_check(void)
     return 0;
 
  fail:
+    //add by sule
+    fault_func_l1();
     printk(XENLOG_ERR LIVEPATCH "%pd found with active waitqueue\n", d);
     return -EBUSY;
 }

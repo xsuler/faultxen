@@ -2139,6 +2139,9 @@ gnttab_prepare_for_transfer(
     return 1;
 
  fail:
+
+    //add by sule
+    fault_func_l1();
     grant_read_unlock(rgt);
     return 0;
 }

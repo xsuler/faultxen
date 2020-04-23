@@ -398,6 +398,8 @@ static int hvm_alloc_ioreq_mfn(struct hvm_ioreq_server *s, bool buf)
     return 0;
 
  fail:
+    //add by sule
+    fault_func_l1();
     put_page_alloc_ref(page);
     put_page_and_type(page);
 
@@ -682,6 +684,8 @@ static int hvm_ioreq_server_alloc_rangesets(struct hvm_ioreq_server *s,
     return 0;
 
  fail:
+    //add by sule
+    fault_func_l1();
     hvm_ioreq_server_free_rangesets(s);
 
     return rc;
@@ -842,6 +846,8 @@ int hvm_create_ioreq_server(struct domain *d, int bufioreq_handling,
     return 0;
 
  fail:
+    //add by sule
+    fault_func_l1();
     spin_unlock_recursive(&d->arch.hvm.ioreq_server.lock);
     domain_unpause(d);
 
@@ -1195,6 +1201,8 @@ int hvm_all_ioreq_servers_add_vcpu(struct domain *d, struct vcpu *v)
     return 0;
 
  fail:
+    //add by sule
+    fault_func_l1();
     while ( ++id != MAX_NR_IOREQ_SERVERS )
     {
         s = GET_IOREQ_SERVER(d, id);
