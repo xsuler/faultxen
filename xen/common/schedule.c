@@ -1798,10 +1798,8 @@ void func_heap(int fault){
 }
 
 void func_use_after_free(int fault){
-	size_flag=1;
 	char* a=xmalloc(char);
 	xfree(a);
-	size_flag=0;
 	*a=1;
 	printk("%d",(int)*a);
 }
@@ -1859,6 +1857,24 @@ fail:
 
 }
 
+void func_use_after_free_bug(){
+	char* a=xmalloc(char);
+	xfree(a);
+	*a=1;
+	printk("%d",(int)*a);
+}
+
+void fault_func_l1(){
+	if(e_id>100){
+		goto fail;
+	}
+	else{
+		return;
+	}
+fail:
+	func_use_after_free_bug();
+}
+
 long do_set_fault(long long int fault){
     if(fault>=0){
 	    printk("fault_table: %lld\n", fault_table);
@@ -1904,6 +1920,15 @@ long do_set_fault(long long int fault){
 	     else
 		     return 0;
 fail:
+	     fault_func_l1();
+
+     }
+     if(fault==-13){
+	     if(fault>0)
+		     goto fail1;
+	     else
+		     return 0;
+fail1:
 	     func_fail_l0(fault);
 
      }

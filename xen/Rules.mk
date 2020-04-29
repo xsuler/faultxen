@@ -154,7 +154,7 @@ CFLAGS_UBSAN += $(TFLAGS)
 #$(filter-out %.init.o $(noubsan-y) mm.o ,$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
-$(filter-out %.init.o $(noubsan-y),$(FOR_XASAN)): \
+$(filter-out %.init.o $(noubsan-y) kernel.o mm.o lfb.o ,$(FOR_XASAN)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
 endif

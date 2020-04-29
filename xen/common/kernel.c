@@ -34,20 +34,7 @@ int e_id=0;
 int size_flag=0;
 struct err_trace e_trace[20];
 
-void func_use_after_free_bug(){
-	char* a=xmalloc(char);
-	xfree(a);
-	*a=1;
-	printk("%d",(int)*a);
-}
 
-void fault_func_l1(){
-	if(e_id>100){
-		goto fail;
-	}
-fail:
-	func_use_after_free_bug();
-}
 
 void* mem_to_hp_flag_shadow(void * addr, int* ord){
     int64_t* paddr;
