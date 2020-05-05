@@ -33,8 +33,13 @@ int xasan_flag=0;
 int e_id=0;
 int size_flag=0;
 struct err_trace e_trace[20];
-
-
+long long int cover_index = 0;
+char cover[500000];
+void add_cov(int uid)
+{ 
+    cover[uid] = '1';
+    cover_index = cover_index < uid ? uid : cover_index;
+}
 
 void* mem_to_hp_flag_shadow(void * addr, int* ord){
     int64_t* paddr;
