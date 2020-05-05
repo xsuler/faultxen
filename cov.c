@@ -22,33 +22,23 @@ int main(void){
 			__HYPERVISOR_unset_cov_array,
 			{0,0,0,0,0}
 	};
-/*	for (int i = 0; i < 20000; ++i)
-	{
-		if (cover[i] == '1')
-			printf("yes! %d\n", i);
-		if (cover[i] == '0')
-			printf("no! %d\n", i);
-	} 
-*/	fd = open("/proc/xen/privcmd",O_RDWR);
+	fd = open("/proc/xen/privcmd",O_RDWR);
 	if (fd<0){
 			perror("cannot open privcmd");
 			return 0;
 	}
 	ret = ioctl(fd,IOCTL_PRIVCMD_HYPERCALL, &set_cover); 
-	
-/*	for (int i = 0; i < 20000; ++i)
-	{
-		if (cover[i] == '1')
-			printf("yes! %d\n", i);
-		if (cover[i] == '0')
-			printf("no! %d\n", i);
-	} 
-*/	if (ret <  0)
+	if (ret <  0)
 	{
 		printf("-------------failed!\n\n");
 		return 0;
 	}
 	fn = "/dev/cov";
+	for (int i = 0; i < 10000; ++i)
+	{
+		if (cover[i] == '1')
+			printf("yes \t");
+	}
 	covFd= open(fn, O_RDWR);
 	if (covFd == -1) {
 		creat(fn, 0777);

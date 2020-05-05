@@ -54,6 +54,7 @@ void do_unset_cov_array(void)
 	    if (cover[i] == '1')
 	    	cover[i] = '0';
     }
+    memset(cover, '0', cover_index);
     printk("------------------------------\n\n\n");
    cover_index=0;
 }
