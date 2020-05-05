@@ -97,9 +97,9 @@ extern struct err_trace e_trace[20];
 extern int e_id;
 extern int size_flag;
 extern char ary[5];
-
-
-
+void add_cov(int uid);
+extern long long int cover_index;
+extern char cover[500000]; 
 
 typedef bool bool_t;
 #define test_and_set_bool(b)   xchg(&(b), true)
