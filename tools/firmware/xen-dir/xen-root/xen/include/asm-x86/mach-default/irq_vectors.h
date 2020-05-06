@@ -1,1 +1,0 @@
-/root/tm/faultxen/tools/firmware/xen-dir/../../../xen/include/asm-x86/mach-default/irq_vectors.h

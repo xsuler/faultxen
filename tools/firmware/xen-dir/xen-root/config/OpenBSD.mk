@@ -1,1 +1,0 @@
-/root/tm/faultxen/tools/firmware/xen-dir/../../../config/OpenBSD.mk

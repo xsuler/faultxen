@@ -1,1 +1,0 @@
-/root/tm/faultxen/tools/include/../../xen/include/public/device_tree_defs.h

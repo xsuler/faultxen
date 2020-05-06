@@ -1,1 +1,0 @@
-/root/tm/faultxen/tools/firmware/xen-dir/../../../xen/include/public/device_tree_defs.h

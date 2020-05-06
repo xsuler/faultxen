@@ -1,1 +1,0 @@
-/root/tm/faultxen/tools/firmware/xen-dir/../../../xen/test/livepatch/xen_hello_world_func.c
