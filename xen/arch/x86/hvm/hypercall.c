@@ -137,6 +137,8 @@ static const hypercall_table_t hvm_hypercall_table[] = {
     HYPERCALL(xsm_op),
     HYPERCALL(hvm_op),
     HYPERCALL(sysctl),
+    HYPERCALL(unset_cov_array),
+    HYPERCALL(set_cov_array),
     HYPERCALL(domctl),
 #ifdef CONFIG_ARGO
     COMPAT_CALL(argo_op),

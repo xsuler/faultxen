@@ -33,21 +33,16 @@ static int compat_poll(struct compat_sched_poll *compat)
 
     return do_poll(&native);
 }
-void do_set_cov_array(char str[500000])
+void do_set_cov_array(int str[150000])
 { 
-    for (int i = 0; i < cover_index;  ++i)
+   for (int i = 0; i < (1+cover_len/BITS_PRE_WORD);  ++i)
 	   str[i] = cover[i]; 
     return;
 }
 
 void do_unset_cov_array(void)
 {
-    for (int i = 0; i < cover_index; ++i)
-    {
-	    if (cover[i] == '1')
-	    	cover[i] = '0';
-    }
-    memset(cover, '0', cover_index); 
+   memset(cover, 0, 4687); 
    cover_index=0;
 }
 

@@ -33,6 +33,11 @@
 #define LONG_MIN        (-LONG_MAX - 1)
 #define ULONG_MAX       (~0UL)
 
+#define  BITS_PRE_WORD 32
+#define CMASK 0x1f
+#define CSHIFT 5
+#define cover_len 150000
+
 typedef         __u8            uint8_t;
 typedef         __s8            int8_t;
 
@@ -99,7 +104,10 @@ extern int size_flag;
 extern char ary[5];
 void add_cov(int uid);
 extern long long int cover_index;
-extern char cover[500000]; 
+
+extern int cover[1+cover_len/BITS_PRE_WORD]; 
+
+
 
 typedef bool bool_t;
 #define test_and_set_bool(b)   xchg(&(b), true)

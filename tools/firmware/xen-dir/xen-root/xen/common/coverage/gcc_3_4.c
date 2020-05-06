@@ -1,0 +1,1 @@
+/root/tm/faultxen/tools/firmware/xen-dir/../../../xen/common/coverage/gcc_3_4.c

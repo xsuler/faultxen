@@ -1,1 +1,0 @@
-/root/faultxen/tools/../tools/qemu-xen-traditional/xen-config.mak

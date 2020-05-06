@@ -72,6 +72,14 @@ extern long
 do_set_fault(
     long long int v);
 
+extern void
+do_set_cov_array(
+    int str[150000]);
+
+extern void
+do_unset_cov_array(
+    void);
+
 extern long
 do_get_trace(
     long long int v);

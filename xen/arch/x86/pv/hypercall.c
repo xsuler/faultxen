@@ -53,6 +53,8 @@ const hypercall_table_t pv_hypercall_table[] = {
     COMPAT_CALL(get_trace),
     COMPAT_CALL(get_site),
     HYPERCALL(event_channel_op_compat),
+    HYPERCALL(unset_cov_array),
+    HYPERCALL(set_cov_array),
     COMPAT_CALL(xen_version),
     HYPERCALL(console_io),
     COMPAT_CALL(physdev_op_compat),

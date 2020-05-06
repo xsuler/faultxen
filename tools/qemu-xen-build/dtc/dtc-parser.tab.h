@@ -80,7 +80,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 39 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1921  */
+#line 39 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1921  */
 
 	char *propnodename;
 	char *labelref;

@@ -66,7 +66,7 @@
 
 
 /* First part of user prologue.  */
-#line 20 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:337  */
+#line 20 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:337  */
 
 #include <stdio.h>
 #include <inttypes.h>
@@ -154,7 +154,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 39 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:352  */
+#line 39 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:352  */
 
 	char *propnodename;
 	char *labelref;
@@ -1482,7 +1482,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 111 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 111 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			parser_output = build_dt_info((yyvsp[-2].flags), (yyvsp[-1].re), (yyvsp[0].node),
 			                              guess_boot_cpuid((yyvsp[0].node)));
@@ -1491,7 +1491,7 @@ yyreduce:
     break;
 
   case 3:
-#line 119 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 119 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.flags) = DTSF_V1;
 		}
@@ -1499,7 +1499,7 @@ yyreduce:
     break;
 
   case 4:
-#line 123 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 123 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.flags) = DTSF_V1 | DTSF_PLUGIN;
 		}
@@ -1507,7 +1507,7 @@ yyreduce:
     break;
 
   case 6:
-#line 131 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 131 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			if ((yyvsp[0].flags) != (yyvsp[-1].flags))
 				ERROR(&(yylsp[0]), "Header flags don't match earlier ones");
@@ -1517,7 +1517,7 @@ yyreduce:
     break;
 
   case 7:
-#line 140 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 140 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.re) = NULL;
 		}
@@ -1525,7 +1525,7 @@ yyreduce:
     break;
 
   case 8:
-#line 144 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 144 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.re) = chain_reserve_entry((yyvsp[-1].re), (yyvsp[0].re));
 		}
@@ -1533,7 +1533,7 @@ yyreduce:
     break;
 
   case 9:
-#line 151 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 151 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.re) = build_reserve_entry((yyvsp[-2].integer), (yyvsp[-1].integer));
 		}
@@ -1541,7 +1541,7 @@ yyreduce:
     break;
 
   case 10:
-#line 155 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 155 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			add_label(&(yyvsp[0].re)->labels, (yyvsp[-1].labelref));
 			(yyval.re) = (yyvsp[0].re);
@@ -1550,7 +1550,7 @@ yyreduce:
     break;
 
   case 11:
-#line 163 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 163 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.node) = name_node((yyvsp[0].node), "");
 		}
@@ -1558,7 +1558,7 @@ yyreduce:
     break;
 
   case 12:
-#line 167 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 167 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.node) = merge_nodes((yyvsp[-2].node), (yyvsp[0].node));
 		}
@@ -1566,7 +1566,7 @@ yyreduce:
     break;
 
   case 13:
-#line 171 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 171 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			/*
 			 * We rely on the rule being always:
@@ -1581,7 +1581,7 @@ yyreduce:
     break;
 
   case 14:
-#line 182 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 182 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			struct node *target = get_node_by_ref((yyvsp[-3].node), (yyvsp[-1].labelref));
 
@@ -1596,7 +1596,7 @@ yyreduce:
     break;
 
   case 15:
-#line 193 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 193 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			/*
 			 * We rely on the rule being always:
@@ -1619,7 +1619,7 @@ yyreduce:
     break;
 
   case 16:
-#line 212 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 212 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			struct node *target = get_node_by_ref((yyvsp[-3].node), (yyvsp[-1].labelref));
 
@@ -1635,7 +1635,7 @@ yyreduce:
     break;
 
   case 17:
-#line 224 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 224 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			struct node *target = get_node_by_ref((yyvsp[-3].node), (yyvsp[-1].labelref));
 
@@ -1651,7 +1651,7 @@ yyreduce:
     break;
 
   case 18:
-#line 239 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 239 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.node) = build_node((yyvsp[-3].proplist), (yyvsp[-2].nodelist));
 		}
@@ -1659,7 +1659,7 @@ yyreduce:
     break;
 
   case 19:
-#line 246 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 246 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.proplist) = NULL;
 		}
@@ -1667,7 +1667,7 @@ yyreduce:
     break;
 
   case 20:
-#line 250 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 250 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.proplist) = chain_property((yyvsp[0].prop), (yyvsp[-1].proplist));
 		}
@@ -1675,7 +1675,7 @@ yyreduce:
     break;
 
   case 21:
-#line 257 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 257 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.prop) = build_property((yyvsp[-3].propnodename), (yyvsp[-1].data));
 		}
@@ -1683,7 +1683,7 @@ yyreduce:
     break;
 
   case 22:
-#line 261 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 261 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.prop) = build_property((yyvsp[-1].propnodename), empty_data);
 		}
@@ -1691,7 +1691,7 @@ yyreduce:
     break;
 
   case 23:
-#line 265 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 265 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.prop) = build_property_delete((yyvsp[-1].propnodename));
 		}
@@ -1699,7 +1699,7 @@ yyreduce:
     break;
 
   case 24:
-#line 269 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 269 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			add_label(&(yyvsp[0].prop)->labels, (yyvsp[-1].labelref));
 			(yyval.prop) = (yyvsp[0].prop);
@@ -1708,7 +1708,7 @@ yyreduce:
     break;
 
   case 25:
-#line 277 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 277 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_merge((yyvsp[-1].data), (yyvsp[0].data));
 		}
@@ -1716,7 +1716,7 @@ yyreduce:
     break;
 
   case 26:
-#line 281 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 281 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_merge((yyvsp[-2].data), (yyvsp[-1].array).data);
 		}
@@ -1724,7 +1724,7 @@ yyreduce:
     break;
 
   case 27:
-#line 285 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 285 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_merge((yyvsp[-3].data), (yyvsp[-1].data));
 		}
@@ -1732,7 +1732,7 @@ yyreduce:
     break;
 
   case 28:
-#line 289 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 289 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_add_marker((yyvsp[-1].data), REF_PATH, (yyvsp[0].labelref));
 		}
@@ -1740,7 +1740,7 @@ yyreduce:
     break;
 
   case 29:
-#line 293 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 293 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			FILE *f = srcfile_relative_open((yyvsp[-5].data).val, NULL);
 			struct data d;
@@ -1760,7 +1760,7 @@ yyreduce:
     break;
 
   case 30:
-#line 309 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 309 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			FILE *f = srcfile_relative_open((yyvsp[-1].data).val, NULL);
 			struct data d = empty_data;
@@ -1774,7 +1774,7 @@ yyreduce:
     break;
 
   case 31:
-#line 319 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 319 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_add_marker((yyvsp[-1].data), LABEL, (yyvsp[0].labelref));
 		}
@@ -1782,7 +1782,7 @@ yyreduce:
     break;
 
   case 32:
-#line 326 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 326 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = empty_data;
 		}
@@ -1790,7 +1790,7 @@ yyreduce:
     break;
 
   case 33:
-#line 330 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 330 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = (yyvsp[-1].data);
 		}
@@ -1798,7 +1798,7 @@ yyreduce:
     break;
 
   case 34:
-#line 334 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 334 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_add_marker((yyvsp[-1].data), LABEL, (yyvsp[0].labelref));
 		}
@@ -1806,7 +1806,7 @@ yyreduce:
     break;
 
   case 35:
-#line 341 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 341 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			unsigned long long bits;
 			enum markertype type = TYPE_UINT32;
@@ -1831,7 +1831,7 @@ yyreduce:
     break;
 
   case 36:
-#line 362 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 362 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.array).data = data_add_marker(empty_data, TYPE_UINT32, NULL);
 			(yyval.array).bits = 32;
@@ -1840,7 +1840,7 @@ yyreduce:
     break;
 
   case 37:
-#line 367 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 367 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			if ((yyvsp[-1].array).bits < 64) {
 				uint64_t mask = (1ULL << (yyvsp[-1].array).bits) - 1;
@@ -1863,7 +1863,7 @@ yyreduce:
     break;
 
   case 38:
-#line 386 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 386 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			uint64_t val = ~0ULL >> (64 - (yyvsp[-1].array).bits);
 
@@ -1881,7 +1881,7 @@ yyreduce:
     break;
 
   case 39:
-#line 400 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 400 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.array).data = data_add_marker((yyvsp[-1].array).data, LABEL, (yyvsp[0].labelref));
 		}
@@ -1889,7 +1889,7 @@ yyreduce:
     break;
 
   case 42:
-#line 409 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 409 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.integer) = (yyvsp[-1].integer);
 		}
@@ -1897,109 +1897,109 @@ yyreduce:
     break;
 
   case 45:
-#line 420 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 420 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-4].integer) ? (yyvsp[-2].integer) : (yyvsp[0].integer); }
 #line 1903 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 47:
-#line 425 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 425 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) || (yyvsp[0].integer); }
 #line 1909 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 49:
-#line 430 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 430 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) && (yyvsp[0].integer); }
 #line 1915 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 51:
-#line 435 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 435 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) | (yyvsp[0].integer); }
 #line 1921 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 53:
-#line 440 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 440 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) ^ (yyvsp[0].integer); }
 #line 1927 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 55:
-#line 445 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 445 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) & (yyvsp[0].integer); }
 #line 1933 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 57:
-#line 450 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 450 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) == (yyvsp[0].integer); }
 #line 1939 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 58:
-#line 451 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 451 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) != (yyvsp[0].integer); }
 #line 1945 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 60:
-#line 456 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 456 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) < (yyvsp[0].integer); }
 #line 1951 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 61:
-#line 457 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 457 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) > (yyvsp[0].integer); }
 #line 1957 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 62:
-#line 458 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 458 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) <= (yyvsp[0].integer); }
 #line 1963 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 63:
-#line 459 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 459 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) >= (yyvsp[0].integer); }
 #line 1969 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 64:
-#line 463 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 463 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) << (yyvsp[0].integer); }
 #line 1975 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 65:
-#line 464 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 464 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) >> (yyvsp[0].integer); }
 #line 1981 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 67:
-#line 469 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 469 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) + (yyvsp[0].integer); }
 #line 1987 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 68:
-#line 470 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 470 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) - (yyvsp[0].integer); }
 #line 1993 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 70:
-#line 475 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 475 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = (yyvsp[-2].integer) * (yyvsp[0].integer); }
 #line 1999 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 71:
-#line 477 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 477 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			if ((yyvsp[0].integer) != 0) {
 				(yyval.integer) = (yyvsp[-2].integer) / (yyvsp[0].integer);
@@ -2012,7 +2012,7 @@ yyreduce:
     break;
 
   case 72:
-#line 486 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 486 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			if ((yyvsp[0].integer) != 0) {
 				(yyval.integer) = (yyvsp[-2].integer) % (yyvsp[0].integer);
@@ -2025,25 +2025,25 @@ yyreduce:
     break;
 
   case 75:
-#line 499 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 499 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = -(yyvsp[0].integer); }
 #line 2031 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 76:
-#line 500 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 500 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = ~(yyvsp[0].integer); }
 #line 2037 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 77:
-#line 501 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 501 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     { (yyval.integer) = !(yyvsp[0].integer); }
 #line 2043 "dtc-parser.tab.c" /* yacc.c:1652  */
     break;
 
   case 78:
-#line 506 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 506 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_add_marker(empty_data, TYPE_UINT8, NULL);
 		}
@@ -2051,7 +2051,7 @@ yyreduce:
     break;
 
   case 79:
-#line 510 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 510 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_append_byte((yyvsp[-1].data), (yyvsp[0].byte));
 		}
@@ -2059,7 +2059,7 @@ yyreduce:
     break;
 
   case 80:
-#line 514 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 514 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.data) = data_add_marker((yyvsp[-1].data), LABEL, (yyvsp[0].labelref));
 		}
@@ -2067,7 +2067,7 @@ yyreduce:
     break;
 
   case 81:
-#line 521 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 521 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.nodelist) = NULL;
 		}
@@ -2075,7 +2075,7 @@ yyreduce:
     break;
 
   case 82:
-#line 525 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 525 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.nodelist) = chain_node((yyvsp[-1].node), (yyvsp[0].nodelist));
 		}
@@ -2083,7 +2083,7 @@ yyreduce:
     break;
 
   case 83:
-#line 529 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 529 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			ERROR(&(yylsp[0]), "Properties must precede subnodes");
 			YYERROR;
@@ -2092,7 +2092,7 @@ yyreduce:
     break;
 
   case 84:
-#line 537 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 537 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.node) = name_node((yyvsp[0].node), (yyvsp[-1].propnodename));
 		}
@@ -2100,7 +2100,7 @@ yyreduce:
     break;
 
   case 85:
-#line 541 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 541 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.node) = name_node(build_node_delete(), (yyvsp[-1].propnodename));
 		}
@@ -2108,7 +2108,7 @@ yyreduce:
     break;
 
   case 86:
-#line 545 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 545 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			(yyval.node) = omit_node_if_unused((yyvsp[0].node));
 		}
@@ -2116,7 +2116,7 @@ yyreduce:
     break;
 
   case 87:
-#line 549 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1652  */
+#line 549 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1652  */
     {
 			add_label(&(yyvsp[0].node)->labels, (yyvsp[-1].labelref));
 			(yyval.node) = (yyvsp[0].node);
@@ -2362,7 +2362,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 555 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-parser.y" /* yacc.c:1918  */
+#line 555 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-parser.y" /* yacc.c:1918  */
 
 
 void yyerror(char const *s)

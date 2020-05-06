@@ -69,6 +69,10 @@ CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
 CFLAGS-$(CONFIG_DEBUG_INFO) += -g
 CFLAGS += '-D__OBJECT_FILE__="$@"'
 
+ifeq ($(clang), y)
+CFLAGS += -fno-discard-value-names   -Xclang -load -Xclang /root/llvm/build/skeleton/libSkeletonPass.so 
+endif
+
 TFLAGS =  -fno-discard-value-names   -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/gasan/build/skeleton/libSkeletonPass.so
 
 ifneq ($(clang),y)

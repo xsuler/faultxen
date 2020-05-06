@@ -1,1 +1,1 @@
-/root/faultxen/tools/qemu-xen/.gdbinit
+/root/tm/faultxen/tools/qemu-xen-dir/.gdbinit

@@ -1,1 +1,1 @@
-/root/faultxen/tools/qemu-xen/tests/tcg/Makefile
+/root/tm/faultxen/tools/qemu-xen-dir/tests/tcg/Makefile

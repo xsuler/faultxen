@@ -1,0 +1,63 @@
+make -C xen install
+make[1]: Entering directory '/root/faultxen/xen'
+make -f Rules.mk _install
+make[2]: Entering directory '/root/faultxen/xen'
+make -C tools
+make[3]: Entering directory '/root/faultxen/xen/tools'
+make symbols
+make[4]: Entering directory '/root/faultxen/xen/tools'
+make[4]: 'symbols' is up to date.
+make[4]: Leaving directory '/root/faultxen/xen/tools'
+make[3]: Leaving directory '/root/faultxen/xen/tools'
+make -f /root/faultxen/xen/Rules.mk include/xen/compile.h
+make[3]: Entering directory '/root/faultxen/xen'
+ Xen 4.13.0
+make[3]: Leaving directory '/root/faultxen/xen'
+[ -e include/asm ] || ln -sf asm-x86 include/asm
+[ -e arch/x86/efi ] && for f in boot.c runtime.c compat.c efi.h;\
+	do test -r arch/x86/efi/$f || \
+	   ln -nsf ../../../common/efi/$f arch/x86/efi/; \
+	done; \
+	true
+make -f /root/faultxen/xen/Rules.mk -C include
+make[3]: Entering directory '/root/faultxen/xen/include'
+make -C xen/lib/x86 all
+make[4]: Entering directory '/root/faultxen/xen/include/xen/lib/x86'
+make[4]: Nothing to be done for 'all'.
+make[4]: Leaving directory '/root/faultxen/xen/include/xen/lib/x86'
+make[3]: Leaving directory '/root/faultxen/xen/include'
+make -f /root/faultxen/xen/Rules.mk -C arch/x86 asm-offsets.s
+make[3]: Entering directory '/root/faultxen/xen/arch/x86'
+clang -m64 -DBUILD_ID -fno-strict-aliasing -std=gnu99 -Wall -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-local-typedefs -O2 -fomit-frame-pointer -nostdinc -fno-builtin -fno-common -Werror -Wredundant-decls -Wno-pointer-arith -Wvla -pipe -D__XEN__ -include /root/faultxen/xen/include/xen/config.h '-D__OBJECT_FILE__="asm-offsets.s"' -no-integrated-as -MMD -MF ./.asm-offsets.s.d -DXEN_BUILD_EFI -I/root/faultxen/xen/include -I/root/faultxen/xen/include/asm-x86/mach-generic -I/root/faultxen/xen/include/asm-x86/mach-default -DXEN_IMG_OFFSET=0x200000 '-D__OBJECT_LABEL__=arch$x86$asm_offsets.s' -msoft-float -fno-stack-protector -fno-exceptions -Wnested-externs -DHAVE_AS_VMX -DHAVE_AS_SSE4_2 -DHAVE_AS_EPT -DHAVE_AS_RDRAND -DHAVE_AS_FSGSBASE -DHAVE_AS_XSAVEOPT -DHAVE_AS_RDSEED -DHAVE_AS_CLWB -U__OBJECT_LABEL__ -DHAVE_AS_QUOTED_SYM '-D__OBJECT_LABEL__=arch/x86/asm-offsets.s' -DHAVE_AS_INVPCID -DHAVE_AS_NEGATIVE_TRUE -mno-red-zone -fpic -fno-asynchronous-unwind-tables -mno-sse -DGCC_HAS_VISIBILITY_ATTRIBUTE -DBUILD_ID_EFI -S -o asm-offsets.s x86_64/asm-offsets.c
+make[3]: Leaving directory '/root/faultxen/xen/arch/x86'
+make -f /root/faultxen/xen/Rules.mk include/asm-x86/asm-offsets.h
+make[3]: Entering directory '/root/faultxen/xen'
+make[3]: Leaving directory '/root/faultxen/xen'
+make -f /root/faultxen/xen/Rules.mk -C arch/x86 /root/faultxen/xen/xen
+make[3]: Entering directory '/root/faultxen/xen/arch/x86'
+sed "s! $PWD/! !" .asm-offsets.s.d >.asm-offsets.s.d2.tmp && mv -f .asm-offsets.s.d2.tmp .asm-offsets.s.d2
+make -f /root/faultxen/xen/Rules.mk -C /root/faultxen/xen/arch/x86/boot built_in.o
+make[4]: Entering directory '/root/faultxen/xen/arch/x86/boot'
+clang -D__ASSEMBLY__ -m64 -DBUILD_ID -fno-strict-aliasing -Wall -Wstrict-prototypes -Wdeclaration-after-statement -Wno-unused-local-typedefs -O2 -fomit-frame-pointer -nostdinc -fno-builtin -fno-common -Werror -Wredundant-decls -Wno-pointer-arith -Wvla -pipe -D__XEN__ -include /root/faultxen/xen/include/xen/config.h '-D__OBJECT_FILE__="head.o"' -no-integrated-as -MMD -MF ./.head.o.d -I/root/faultxen/xen/include -I/root/faultxen/xen/include/asm-x86/mach-generic -I/root/faultxen/xen/include/asm-x86/mach-default -DXEN_IMG_OFFSET=0x200000 '-D__OBJECT_LABEL__=arch$x86$boot$head.o' -msoft-float -fno-stack-protector -fno-exceptions -Wnested-externs -DHAVE_AS_VMX -DHAVE_AS_SSE4_2 -DHAVE_AS_EPT -DHAVE_AS_RDRAND -DHAVE_AS_FSGSBASE -DHAVE_AS_XSAVEOPT -DHAVE_AS_RDSEED -DHAVE_AS_CLWB -U__OBJECT_LABEL__ -DHAVE_AS_QUOTED_SYM '-D__OBJECT_LABEL__=arch/x86/boot/head.o' -DHAVE_AS_INVPCID -DHAVE_AS_NEGATIVE_TRUE -mno-red-zone -fpic -fno-asynchronous-unwind-tables -mno-sse -DGCC_HAS_VISIBILITY_ATTRIBUTE -Wa,-I/root/faultxen/xen/include -c head.S -o head.o
+ld    -melf_x86_64  -r -o built_in.o head.o
+make[4]: Leaving directory '/root/faultxen/xen/arch/x86/boot'
+make -f /root/faultxen/xen/Rules.mk -C /root/faultxen/xen/arch/x86/efi built_in.o
+make[4]: Entering directory '/root/faultxen/xen/arch/x86/efi'
+objdump -h boot.o | sed -n '/[0-9]/{s,00*,0,g;p;}' | while read idx name sz rest; do \
+	case "$name" in \
+	.*.local) ;; \
+	.text|.text.*|.data|.data.*|.bss) \
+		test $sz != 0 || continue; \
+		echo "Error: size of boot.o:$name is 0x$sz" >&2; \
+		exit $(expr $idx + 1);; \
+	esac; \
+done
+/root/faultxen/xen/Rules.mk:238: recipe for target 'boot.init.o' failed
+make[4]: Leaving directory '/root/faultxen/xen/arch/x86/efi'
+/root/faultxen/xen/Rules.mk:202: recipe for target '/root/faultxen/xen/arch/x86/efi/built_in.o' failed
+make[3]: Leaving directory '/root/faultxen/xen/arch/x86'
+Makefile:141: recipe for target '/root/faultxen/xen/xen' failed
+make[2]: Leaving directory '/root/faultxen/xen'
+Makefile:50: recipe for target 'install' failed
+make[1]: Leaving directory '/root/faultxen/xen'
+Makefile:130: recipe for target 'install-xen' failed

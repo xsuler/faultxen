@@ -675,8 +675,8 @@ int arch_domain_create(struct domain *d,
     d->is_dying = DOMDYING_dead;
    /*********************************/
     // add bug
-    char * bug_addr=xmalloc(char);
-    *(bug_addr+1)=1;
+ //   char * bug_addr=xmalloc(char);
+ //  .. *(bug_addr+1)=1;
     /*********************************/
 
 

@@ -1,1 +1,1 @@
-/root/faultxen/tools/qemu-xen/po/Makefile
+/root/tm/faultxen/tools/qemu-xen-dir/po/Makefile

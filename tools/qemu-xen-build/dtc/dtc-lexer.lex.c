@@ -604,7 +604,7 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 1 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 /*
  * (C) Copyright David Gibson <dwg@au1.ibm.com>, IBM Corporation.  2005.
  *
@@ -628,7 +628,7 @@ char *yytext;
 
 
 
-#line 37 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 37 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 #include "dtc.h"
 #include "srcpos.h"
 #include "dtc-parser.tab.h"
@@ -881,7 +881,7 @@ YY_DECL
 		}
 
 	{
-#line 69 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 69 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 
 #line 887 "dtc-lexer.lex.c"
 
@@ -940,7 +940,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 70 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 70 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			char *name = strchr(yytext, '\"') + 1;
 			yytext[yyleng-1] = '\0';
@@ -950,7 +950,7 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 76 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 76 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			char *line, *fnstart, *fnend;
 			struct data fn;
@@ -984,7 +984,7 @@ case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(BYTESTRING):
 case YY_STATE_EOF(PROPNODENAME):
 case YY_STATE_EOF(V1):
-#line 105 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 105 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			if (!pop_input_file()) {
 				yyterminate();
@@ -994,7 +994,7 @@ case YY_STATE_EOF(V1):
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 111 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 111 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("String: %s\n", yytext);
 			yylval.data = data_copy_escape_string(yytext+1,
@@ -1004,7 +1004,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 118 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 118 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Keyword: /dts-v1/\n");
 			dts_version = 1;
@@ -1014,7 +1014,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 125 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 125 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Keyword: /plugin/\n");
 			return DT_PLUGIN;
@@ -1022,7 +1022,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 130 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 130 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Keyword: /memreserve/\n");
 			BEGIN_DEFAULT();
@@ -1031,7 +1031,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 136 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 136 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Keyword: /bits/\n");
 			BEGIN_DEFAULT();
@@ -1040,7 +1040,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 142 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 142 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Keyword: /delete-property/\n");
 			DPRINT("<PROPNODENAME>\n");
@@ -1050,7 +1050,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 149 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 149 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Keyword: /delete-node/\n");
 			DPRINT("<PROPNODENAME>\n");
@@ -1060,7 +1060,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 156 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 156 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Keyword: /omit-if-no-ref/\n");
 			DPRINT("<PROPNODENAME>\n");
@@ -1070,7 +1070,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 163 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 163 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Label: %s\n", yytext);
 			yylval.labelref = xstrdup(yytext);
@@ -1080,7 +1080,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 170 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 170 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			char *e;
 			DPRINT("Integer Literal: '%s'\n", yytext);
@@ -1106,7 +1106,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 192 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 192 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			struct data d;
 			DPRINT("Character literal: %s\n", yytext);
@@ -1130,7 +1130,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 213 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 213 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {	/* label reference */
 			DPRINT("Ref: %s\n", yytext+1);
 			yylval.labelref = xstrdup(yytext+1);
@@ -1139,7 +1139,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 219 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 219 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {	/* new-style path reference */
 			yytext[yyleng-1] = '\0';
 			DPRINT("Ref: %s\n", yytext+2);
@@ -1149,7 +1149,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 226 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 226 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			yylval.byte = strtol(yytext, NULL, 16);
 			DPRINT("Byte: %02x\n", (int)yylval.byte);
@@ -1158,7 +1158,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 232 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 232 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("/BYTESTRING\n");
 			BEGIN_DEFAULT();
@@ -1167,7 +1167,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 238 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 238 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("PropNodeName: %s\n", yytext);
 			yylval.propnodename = xstrdup((yytext[0] == '\\') ?
@@ -1178,7 +1178,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 246 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 246 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Binary Include\n");
 			return DT_INCBIN;
@@ -1187,64 +1187,64 @@ YY_RULE_SETUP
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 251 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 251 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 /* eat whitespace */
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 252 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 252 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 /* eat C-style comments */
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 253 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 253 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 /* eat C++-style comments */
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 255 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 255 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_LSHIFT; };
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 256 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 256 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_RSHIFT; };
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 257 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 257 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_LE; };
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 258 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 258 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_GE; };
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 259 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 259 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_EQ; };
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 260 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 260 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_NE; };
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 261 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 261 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_AND; };
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 262 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 262 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 { return DT_OR; };
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 264 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 264 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 {
 			DPRINT("Char: %c (\\x%02x)\n", yytext[0],
 				(unsigned)yytext[0]);
@@ -1262,7 +1262,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 279 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 279 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 ECHO;
 	YY_BREAK
 #line 1269 "dtc-lexer.lex.c"
@@ -2235,7 +2235,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 279 "/root/xen-4.13.0/tools/qemu-xen/dtc/dtc-lexer.l"
+#line 279 "/root/tm/faultxen/tools/qemu-xen-dir/dtc/dtc-lexer.l"
 
 
 static void push_input_file(const char *filename)

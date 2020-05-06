@@ -1,0 +1,10 @@
+prefix=/root/tm/faultxen/tools/libxc/../..
+includedir=/root/tm/faultxen/tools/libxc/../../tools/libxc/include
+libdir=/root/tm/faultxen/tools/libxc
+
+Name: Xencontrol
+Description: The Xencontrol library for Xen hypervisor
+Version: 4.13.0
+Cflags: -I${includedir} -I/root/tm/faultxen/tools/libxc/../../tools/include
+Libs: -L${libdir} -Wl,-rpath-link=${libdir} -lxenctrl
+Requires.private: xenevtchn,xengnttab,xencall,xenforeignmemory,xendevicemodel,xentoollog

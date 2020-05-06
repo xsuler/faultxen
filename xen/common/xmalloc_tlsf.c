@@ -752,6 +752,8 @@ void xfree(void *p)
     unsigned long size;
     unsigned int i;
     unsigned int order;
+    int ord;
+    char* shadow;
     if ( p == NULL || p == ZERO_BLOCK_PTR )
         return;
 
@@ -760,8 +762,7 @@ void xfree(void *p)
     psize=*psz;
 
 
-    int ord;
-    char* shadow=(char*)mem_to_shadow(p+32,&ord);
+    shadow=(char*)mem_to_shadow(p+32,&ord);
     if((*shadow)&(1<<ord)){
         e_trace[e_id].xasan_err_addr=p+32;
         e_trace[e_id].xasan_err_size=psize;

@@ -34,10 +34,11 @@ int e_id=0;
 int size_flag=0;
 struct err_trace e_trace[20];
 long long int cover_index = 0;
-char cover[500000];
+int cover[1+cover_len/BITS_PRE_WORD];
 void add_cov(int uid)
-{ 
-    cover[uid] = '1';
+{
+     cover[uid >> CSHIFT] |= (1<<(uid&CMASK));	
+//	cover[uid] = '1';
     cover_index = cover_index < uid ? uid : cover_index;
 }
 

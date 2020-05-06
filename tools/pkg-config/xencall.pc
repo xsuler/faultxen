@@ -1,0 +1,10 @@
+prefix=/root/tm/faultxen/tools/libs/call/../../..
+includedir=/root/tm/faultxen/tools/libs/call/../../../tools/libs/call/include
+libdir=/root/tm/faultxen/tools/libs/call
+
+Name: Xencall
+Description: The Xencall library for Xen hypervisor
+Version: 1.2
+Cflags: -I${includedir} -I/root/tm/faultxen/tools/libs/call/../../../tools/include
+Libs: -L${libdir} -Wl,-rpath-link=${libdir} -lxencall
+Requires.private: xentoollog,xentoolcore

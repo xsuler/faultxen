@@ -1,1 +1,1 @@
-/root/faultxen/tools/qemu-xen/pc-bios/skiboot.lid
+/root/tm/faultxen/tools/qemu-xen-dir/pc-bios/skiboot.lid
