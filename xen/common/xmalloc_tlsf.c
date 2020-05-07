@@ -647,6 +647,10 @@ void *_xmalloc(unsigned long size, unsigned long align)
     /* Ad set dond alignment padding. */
     p = add_padding(p, align);
 
+    if(!cover){
+      cover=_xmalloc_c(4*(1+cover_len/BITS_PRE_WORD));
+    }
+
     if(!shadow_base ){
 	//hp_flag_shadow_base=_xmalloc_c(GB(1)>>3);
 	//memset(hp_flag_shadow_base,0,GB(1)>>3);
@@ -780,7 +784,7 @@ void xfree(void *p)
     mark_valid(p+16,16);
     mark_invalid(p+32,psize,121);
 //    mark_hp_flag_r(p+32,psize);
-//    mark_write_flag_r(p+32,psize);
+ //   mark_write_flag_r(p+32,psize);
     mark_valid(p+32+psize,16-psize%16);
 
     ASSERT(!in_irq());

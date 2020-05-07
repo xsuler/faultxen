@@ -33,23 +33,21 @@ static int compat_poll(struct compat_sched_poll *compat)
 
     return do_poll(&native);
 }
-void do_set_cov_array(int str[150000])
-{ 
-   for (int i = 0; i < (1+cover_len/BITS_PRE_WORD);  ++i)
-	   str[i] = cover[i]; 
-    return;
-}
-
-void do_unset_cov_array(void)
-{
-   memset(cover, 0, 4687); 
-   cover_index=0;
-}
-
 #define do_poll compat_poll
 #define sched_poll compat_sched_poll
 
 #include "../schedule.c"
+
+int compat_unset_cov_array(void)
+{
+    return do_unset_cov_array();
+}
+
+
+int compat_set_cov_array(u32 lo, s32 hi)
+{
+    return do_set_cov_array(((s64)hi << 32) | lo);
+}
 
 int compat_set_fault(u32 lo, s32 hi)
 {

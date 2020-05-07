@@ -1747,6 +1747,22 @@ ret_t do_sched_op(int cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
 
 #ifndef COMPAT
 
+int do_set_cov_array(long long int strl)
+{ 
+   int* str=(int*) strl;
+   for (int i = 0; i < (1+cover_len/BITS_PRE_WORD);  ++i)
+	   str[i] = cover[i]; 
+    return 0;
+}
+
+int do_unset_cov_array(void)
+{
+   memset(cover, 0, 4687); 
+   cover_index=0;
+   return 0;
+}
+
+
 long do_get_site(long long int p){
     long long int* ptr=(long long int*)p;
     *ptr=fault_site;

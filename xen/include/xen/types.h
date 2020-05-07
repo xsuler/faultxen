@@ -105,7 +105,7 @@ extern char ary[5];
 void add_cov(int uid);
 extern long long int cover_index;
 
-extern int cover[1+cover_len/BITS_PRE_WORD]; 
+extern int* cover; 
 
 
 

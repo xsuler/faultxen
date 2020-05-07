@@ -74,7 +74,10 @@ ifeq ($(clang), y)
 RFLAGS += -fno-discard-value-names   -Xclang -load -Xclang /root/llvm_instr/build/skeleton/libSkeletonPass.so 
 endif
 
-TFLAGS =  -fno-discard-value-names   -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/gasan/build/skeleton/libSkeletonPass.so
+TFLAGS :=
+ifeq ($(clang), y)
+TFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/gasan/build/skeleton/libSkeletonPass.so
+endif
 
 ifneq ($(clang),y)
 # Clang doesn't understand this command line argument, and doesn't appear to
@@ -162,7 +165,7 @@ CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 $(filter-out %.init.o $(noubsan-y) kernel.o mm.o lfb.o ,$(FOR_XASAN)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
-$(filter-out %.init.o  ,$(FOR_XASAN) $(obj-y)): \
+$(filter-out %.init.o  ,$(FOR_XASAN)): \
 CFLAGS += $(filter-out -fno-%,$(RFLAGS)) $(filter -fno-%,$(RFLAGS))
 
 endif

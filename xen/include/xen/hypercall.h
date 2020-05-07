@@ -72,11 +72,11 @@ extern long
 do_set_fault(
     long long int v);
 
-extern void
+extern int
 do_set_cov_array(
-    int str[150000]);
+    long long int v);
 
-extern void
+extern int
 do_unset_cov_array(
     void);
 
@@ -206,6 +206,15 @@ extern int
 compat_set_timer_op(
     u32 lo,
     s32 hi);
+
+extern int
+compat_set_cov_array(
+    u32 lo,
+    s32 hi);
+
+extern int
+compat_unset_cov_array(
+    void);
 
 extern int
 compat_set_fault(
