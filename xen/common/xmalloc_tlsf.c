@@ -648,11 +648,11 @@ void *_xmalloc(unsigned long size, unsigned long align)
     p = add_padding(p, align);
 
     if(!shadow_base ){
-	hp_flag_shadow_base=_xmalloc_c(GB(1)>>3);
-	memset(hp_flag_shadow_base,0,GB(1)>>3);
+	//hp_flag_shadow_base=_xmalloc_c(GB(1)>>3);
+	//memset(hp_flag_shadow_base,0,GB(1)>>3);
 
-	mem_shadow_base=_xmalloc_c(GB(1)>>3);
-	memset(mem_shadow_base,0,GB(1)>>3);
+	//mem_shadow_base=_xmalloc_c(GB(1)>>3);
+	//memset(mem_shadow_base,0,GB(1)>>3);
 
 	shadow_base=_xmalloc_c(GB(1)>>3);
 	memset(shadow_base,0,GB(1)>>3);
@@ -673,8 +673,8 @@ void *_xmalloc(unsigned long size, unsigned long align)
     mark_invalid(p+16,16,120);
     mark_valid(p+32,osize);
 
-    if(xasan_flag)
-	    mark_hp_flag(p+32,osize);
+//    if(xasan_flag)
+//	    mark_hp_flag(p+32,osize);
     mark_invalid(p+32+osize,16-osize%16,120);
     return p+32;
 } void *_xzalloc(unsigned long size, unsigned long align)
@@ -779,8 +779,8 @@ void xfree(void *p)
 
     mark_valid(p+16,16);
     mark_invalid(p+32,psize,121);
-    mark_hp_flag_r(p+32,psize);
-    mark_write_flag_r(p+32,psize);
+//    mark_hp_flag_r(p+32,psize);
+//    mark_write_flag_r(p+32,psize);
     mark_valid(p+32+psize,16-psize%16);
 
     ASSERT(!in_irq());

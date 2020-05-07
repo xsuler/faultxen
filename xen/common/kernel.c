@@ -299,39 +299,39 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 	}
     }
 
-    for(int i=0;i<size;i++){
-
-	shadow=mem_to_hp_flag_shadow(addr+i,&ord);
-	s=*(char*)shadow;
-	if(!(s&(1<<ord)))
-		continue;
-
-	shadow=mem_to_mem_shadow(addr+i,&ord);
-	if(!shadow)
-		return;
-
-	s=*(char*)shadow;
-	if(type==1){
-		//write
-		char* as=(char*)shadow;
-		*as=s|(1<<ord);
-	}
-	if(type==0){
-		if(!(s&(1<<ord))){
-		    e_trace[e_id].xasan_err_addr=addr;
-		    e_trace[e_id].xasan_err_size=size;
-		    e_trace[e_id].is_write=type;
-
-		    e_trace[e_id].xasan_err_type=124;
-		    e_trace[e_id].xasan_ord=ord;
-		    e_trace[e_id].xasan_shadow=s;
-		    e_id++;
-		    if(e_id==20)
-			    e_id=0;
-		    break;
-		}
-	}
-    }
+//    for(int i=0;i<size;i++){
+//
+//	shadow=mem_to_hp_flag_shadow(addr+i,&ord);
+//	s=*(char*)shadow;
+//	if(!(s&(1<<ord)))
+//		continue;
+//
+//	shadow=mem_to_mem_shadow(addr+i,&ord);
+//	if(!shadow)
+//		return;
+//
+//	s=*(char*)shadow;
+//	if(type==1){
+//		//write
+//		char* as=(char*)shadow;
+//		*as=s|(1<<ord);
+//	}
+//	if(type==0){
+//		if(!(s&(1<<ord))){
+//		    e_trace[e_id].xasan_err_addr=addr;
+//		    e_trace[e_id].xasan_err_size=size;
+//		    e_trace[e_id].is_write=type;
+//
+//		    e_trace[e_id].xasan_err_type=124;
+//		    e_trace[e_id].xasan_ord=ord;
+//		    e_trace[e_id].xasan_shadow=s;
+//		    e_id++;
+//		    if(e_id==20)
+//			    e_id=0;
+//		    break;
+//		}
+//	}
+//    }
 }
   
 int willInject(int uid){

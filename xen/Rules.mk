@@ -69,8 +69,9 @@ CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
 CFLAGS-$(CONFIG_DEBUG_INFO) += -g
 CFLAGS += '-D__OBJECT_FILE__="$@"'
 
+RFLAGS :=
 ifeq ($(clang), y)
-CFLAGS += -fno-discard-value-names   -Xclang -load -Xclang /root/llvm/build/skeleton/libSkeletonPass.so 
+RFLAGS += -fno-discard-value-names   -Xclang -load -Xclang /root/llvm_instr/build/skeleton/libSkeletonPass.so 
 endif
 
 TFLAGS =  -fno-discard-value-names   -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/gasan/build/skeleton/libSkeletonPass.so
@@ -160,6 +161,9 @@ CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
 $(filter-out %.init.o $(noubsan-y) kernel.o mm.o lfb.o ,$(FOR_XASAN)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
+
+$(filter-out %.init.o  ,$(FOR_XASAN) $(obj-y)): \
+CFLAGS += $(filter-out -fno-%,$(RFLAGS)) $(filter -fno-%,$(RFLAGS))
 
 endif
 
