@@ -1769,106 +1769,106 @@ long do_get_trace(long long int trace){
 int rr;
 
 void func_umr_stack(int fault){
-//	int a[10];
-//	a[0]=1;
-//	printk("umr stack: %d\n",a[-fault]);
+	int a[10];
+	a[0]=1;
+	printk("umr stack: %d\n",a[-fault]);
 }
 
 
 void func_umr_malloc(int fault){
-//	char* aa=xmalloc(char);
-//	printk("umr malloc: %d",*aa);		
+	char* aa=xmalloc(char);
+	printk("umr malloc: %d",*aa);		
 }
 
 void func_stack(int fault){
-/*	char a[4];
+	char a[4];
 	char b[4];
 	a[4-fault]=1;
-	printk("stack over flow: %p %p\n",a+4-fault,b);*/
+	printk("stack over flow: %p %p\n",a+4-fault,b);
 }
 
 void func_heap(int fault){
-/*
+
 	char* a=xmalloc(char);
 	char* b=xmalloc(char);
 	char* c=xmalloc(char);
 	(*(a+1))=0;
 
 	printk("normal %p %p %p\n",a,b,c);
-*/
+
 }
 
 void func_use_after_free(int fault){
-/*	char* a=xmalloc(char);
+	char* a=xmalloc(char);
 	xfree(a);
 	*a=1;
 	printk("%d",(int)*a);
-*/	
+	
 }
 
-//char* uar;
+char* uar;
 
 void func_use_after_return_claim(void){
-//	char x;
-//	uar=&x;
+	char x;
+	uar=&x;
 }
 void func_use_after_return(int fault){
-//	func_use_after_return_claim();
-//	*uar=1;
+	func_use_after_return_claim();
+	*uar=1;
 }
 
-//char ary[5]={0};
+char ary[5]={0};
 void func_global(int fault){
-//	ary[1-fault]=1;
+	ary[1-fault]=1;
 }
 void func_df(int fault){
-/*	char* a=xmalloc(char);
+	char* a=xmalloc(char);
 	xfree(a);
 	xfree(a);
-*/	
+	
 }
 
 void func_fail_l2(int fault){
-/*     if(fault>0)
+     if(fault>0)
 	     goto fail;
      else
 	     return;
 fail:
      func_use_after_free(fault);
-*/
+
 }
 
 
 void func_fail_l1(int fault){
-/*     if(fault>0)
+     if(fault>0)
 	     goto fail;
      else
 	     return;
 fail:
      func_fail_l2(fault);
 
-*/}
+}
 
 
 void func_fail_l0(int fault){
-/*     if(fault>0)
+     if(fault>0)
 	     goto fail;
      else
 	     return;
 fail:
      func_fail_l1(fault);
 
-*/}
+}
 
 void func_use_after_free_bug(void){
-/*	char* a=xmalloc(char);
+	char* a=xmalloc(char);
 	xfree(a);
 	*a=1;
 	printk("%d",(int)*a);
-*/}
+}
 
 void fault_func_l1(void){
-/*	if(e_id>100){
+	if(e_id>100){
 		goto fail;
 	}
 	else{
@@ -1876,7 +1876,7 @@ void fault_func_l1(void){
 	}
 fail:
 	func_use_after_free_bug();
-*/}
+}
 
 long do_set_fault(long long int fault){
     if(fault>=0){

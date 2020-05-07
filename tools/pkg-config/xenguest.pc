@@ -1,0 +1,10 @@
+prefix=/root/tm/faultxen/tools/libxc/../..
+includedir=/root/tm/faultxen/tools/libxc/../../tools/libxc/include
+libdir=/root/tm/faultxen/tools/libxc
+
+Name: Xenguest
+Description: The Xenguest library for Xen hypervisor
+Version: 4.13.0
+Cflags: -I${includedir}
+Libs: -L${libdir} -Wl,-rpath-link=${libdir} -lxenguest
+Requires.private: xentoollog,xencall,xenforeignmemory,xenevtchn
