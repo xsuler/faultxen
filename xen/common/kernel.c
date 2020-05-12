@@ -24,8 +24,8 @@ enum system_state system_state = SYS_STATE_early_boot;
 xen_commandline_t saved_cmdline;
 static const char __initconst opt_builtin_cmdline[] = CONFIG_CMDLINE;
 
-long long int fault_table=0;
-long long int fault_site=0;
+int* fault_table=0;
+int* fault_site=0;
 void* shadow_base=0;
 void* mem_shadow_base=0;
 void* hp_flag_shadow_base=0;
@@ -218,7 +218,7 @@ void mark_invalid(char* addr, int64_t size, char type){
 		if(!shadow)
 			return;
 		*shadow=(*shadow)|(1<<ord);
-		if(type>=120&&type<124)
+		if((type>=120&&type<124))
 			*(addr+i)=type;
 	}
 }
@@ -286,17 +286,19 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 
 	s=*(char*)shadow;
 	if((s&(1<<ord))&&(*addr==0||(*addr>=120&&*addr<124))){
-	    e_trace[e_id].xasan_err_addr=addr;
-	    e_trace[e_id].xasan_err_size=size;
-	    e_trace[e_id].is_write=type;
+	    if(*addr>=118&&*addr<=124){
+		    e_trace[e_id].xasan_err_addr=addr;
+		    e_trace[e_id].xasan_err_size=size;
+		    e_trace[e_id].is_write=type;
 
-	    e_trace[e_id].xasan_err_type=*addr;
-	    e_trace[e_id].xasan_ord=ord;
-	    e_trace[e_id].xasan_shadow=s;
-	    e_id++;
-	    if(e_id==20)
-		    e_id=0;
-	    break;
+		    e_trace[e_id].xasan_err_type=*addr;
+		    e_trace[e_id].xasan_ord=ord;
+		    e_trace[e_id].xasan_shadow=s;
+		    e_id++;
+		    if(e_id==20)
+			    e_id=0;
+		    break;
+	    }
 	}
     }
 
@@ -336,8 +338,8 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 }
   
 int willInject(int uid){
-   fault_site=fault_site|(1<<uid);
-   return  (fault_table>>uid)&1;
+   fault_site[uid >> CSHIFT] |= (1<<(uid&CMASK));	
+   return  (fault_table[uid>>CSHIFT] & (1<<(uid&CMASK)) )!= 0;
 }
 
 static int assign_integer_param(const struct kernel_param *param, uint64_t val)

@@ -1757,16 +1757,18 @@ int do_set_cov_array(long long int strl)
 
 int do_unset_cov_array(void)
 {
-   memset(cover, 0, 4687); 
+   for (int i = 0; i < (1+cover_len/BITS_PRE_WORD);  ++i)
+	   cover[i] = 0;
    cover_index=0;
    return 0;
 }
 
 
 long do_get_site(long long int p){
-    long long int* ptr=(long long int*)p;
-    *ptr=fault_site;
-    printk("get fault site: %lld\n",fault_site);
+    int* ptr=(int*)p;
+    for(int i=0;i<fault_len;i++)
+	    ptr[i]=fault_site[i];
+    printk("get fault site %d\n",ptr[0]);
     return 0;
 }
 long do_get_trace(long long int trace){
@@ -1892,43 +1894,49 @@ fail:
 }
 
 long do_set_fault(long long int fault){
-    if(fault>=0){
-	    printk("fault_table: %lld\n", fault_table);
-	    fault_table=fault;
-	    printk("fault_table new: %lld\n", fault_table);
-    }
     if(fault==-1){
 	  xasan_flag = 1;
 	  printk("set xasan_flag: %d\n", xasan_flag);
+	return 0;
     }
      if(fault==-2){
-	  fault_site = 0;
-	  printk("reset fault_site: %lld\n", fault_site);
+	    for (int i = 0; i < fault_len;  ++i)
+		   fault_site[i] =0; 
+	  printk("reset fault_site \n");
+	return 0;
     }
 
      if(fault==-3){
 	     func_use_after_free(fault);
+	return 0;
     }
     if(fault==-4){
 	     func_stack(fault);
+	return 0;
     }
      if(fault==-5){
 	     func_heap(fault);
+	return 0;
     }
      if(fault==-6){
 	     func_global(fault);
+	return 0;
     }
      if(fault==-8){
 	func_use_after_return(fault);
+	return 0;
     }
      if(fault==-9){
 	func_umr_stack(fault);
+	return 0;
     }
      if(fault==-10){
 	func_umr_malloc(fault);
+	return 0;
     }
      if(fault==-11){
 	func_df(fault);
+	return 0;
     }
      if(fault==-12){
 	     if(fault>0)
@@ -1937,6 +1945,7 @@ long do_set_fault(long long int fault){
 		     return 0;
 fail:
 	     fault_func_l1();
+		return 0;
 
      }
      if(fault==-13){
@@ -1946,9 +1955,14 @@ fail:
 		     return 0;
 fail1:
 	     func_fail_l0(fault);
+		return 0;
 
      }
 
+    int* str=(int*)fault;
+    for (int i = 0; i < fault_len;  ++i)
+	   fault_table[i]=str[i]; 
+    printk("getting cov %d\n",str[0]);
 
     return 0;
 }

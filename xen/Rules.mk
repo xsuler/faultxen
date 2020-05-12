@@ -74,9 +74,15 @@ ifeq ($(clang), y)
 RFLAGS += -fno-discard-value-names   -Xclang -load -Xclang /root/llvm_instr/build/skeleton/libSkeletonPass.so 
 endif
 
+STFLAGS :=
+ifeq ($(clang), y)
+STFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/gasan/build/skeleton/libSkeletonPass.so
+endif
+
+
 TFLAGS :=
 ifeq ($(clang), y)
-TFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/gasan/build/skeleton/libSkeletonPass.so
+TFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xsan/build/skeleton/libSkeletonPass.so  
 endif
 
 ifneq ($(clang),y)
@@ -157,15 +163,18 @@ $(filter-out %.init.o $(nocov-y),$(obj-y) $(obj-bin-y) $(extra-y)): CFLAGS += $(
 endif
 
 ifeq ($(CONFIG_UBSAN),y)
-CFLAGS_UBSAN += $(TFLAGS)
+CFLAGS_UBSAN += $(STFLAGS)
 # Any -fno-sanitize= options need to come after any -fsanitize= options
 #$(filter-out %.init.o $(noubsan-y) mm.o ,$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
-$(filter-out %.init.o $(noubsan-y) kernel.o mm.o lfb.o ,$(FOR_XASAN)): \
+$(filter-out %.init.o $(noubsan-y) ,$(FOR_XASAN)): \
 CFLAGS += $(filter-out -fno-%,$(CFLAGS_UBSAN)) $(filter -fno-%,$(CFLAGS_UBSAN))
 
 $(filter-out %.init.o  ,$(FOR_XASAN)): \
+CFLAGS += $(filter-out -fno-%,$(TFLAGS)) $(filter -fno-%,$(TFLAGS))
+
+$(filter-out %.init.o  ,$(obj-y) $(obj-bin-y) $(extra-y)): \
 CFLAGS += $(filter-out -fno-%,$(RFLAGS)) $(filter -fno-%,$(RFLAGS))
 
 endif

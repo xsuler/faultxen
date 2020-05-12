@@ -37,6 +37,7 @@
 #define CMASK 0x1f
 #define CSHIFT 5
 #define cover_len 150000
+#define fault_len 100
 
 typedef         __u8            uint8_t;
 typedef         __s8            int8_t;
@@ -92,8 +93,9 @@ struct err_trace
 };
 
 
-extern long long int fault_table;
-extern long long int fault_site;
+extern int* fault_table;
+extern int* fault_site;
+
 extern void* shadow_base;
 extern void* mem_shadow_base;
 extern void* hp_flag_shadow_base;

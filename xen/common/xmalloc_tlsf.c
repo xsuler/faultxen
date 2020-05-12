@@ -651,6 +651,11 @@ void *_xmalloc(unsigned long size, unsigned long align)
       cover=_xmalloc_c(4*(1+cover_len/BITS_PRE_WORD));
     }
 
+    if(!fault_table){
+      fault_table=_xmalloc_c(4*fault_len);
+      fault_site=_xmalloc_c(4*fault_len);
+    }
+
     if(!shadow_base ){
 	//hp_flag_shadow_base=_xmalloc_c(GB(1)>>3);
 	//memset(hp_flag_shadow_base,0,GB(1)>>3);
@@ -764,6 +769,7 @@ void xfree(void *p)
     p=p-32;
     psz=(unsigned long*)p;
     psize=*psz;
+
 
 
     shadow=(char*)mem_to_shadow(p+32,&ord);
