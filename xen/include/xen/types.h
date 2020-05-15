@@ -79,6 +79,13 @@ void* mem_to_shadow(void * addr, int* ord);
 void* mem_to_mem_shadow(void * addr, int* ord);
 void* mem_to_hp_flag_shadow(void * addr, int* ord);
 
+
+void ehc_0(int f);
+void ehc_1(int f);
+void ehc_2(int f);
+void ehc_3(int f);
+void ehc_4(int f);
+
 struct err_trace
 {
 	int id;
@@ -95,6 +102,7 @@ struct err_trace
 
 extern int* fault_table;
 extern int* fault_site;
+extern int* ehc_site;
 
 extern void* shadow_base;
 extern void* mem_shadow_base;

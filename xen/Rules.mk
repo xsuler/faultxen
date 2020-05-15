@@ -71,18 +71,18 @@ CFLAGS += '-D__OBJECT_FILE__="$@"'
 
 RFLAGS :=
 ifeq ($(clang), y)
-RFLAGS += -fno-discard-value-names   -Xclang -load -Xclang /root/llvm_instr/build/skeleton/libSkeletonPass.so 
+RFLAGS += -fno-discard-value-names   -Xclang -load -Xclang /root/xsan/llvm_instr/build/skeleton/libSkeletonPass.so 
 endif
 
 STFLAGS :=
 ifeq ($(clang), y)
-STFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/gasan/build/skeleton/libSkeletonPass.so
+STFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/xsan/xasan/build/skeleton/libSkeletonPass.so  -Xclang -load -Xclang /root/xsan/gasan/build/skeleton/libSkeletonPass.so
 endif
 
 
 TFLAGS :=
 ifeq ($(clang), y)
-TFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xsan/build/skeleton/libSkeletonPass.so  
+TFLAGS +=  -fno-discard-value-names   -Xclang -load -Xclang /root/xsan/finj/build/skeleton/libSkeletonPass.so -Xclang -load -Xclang /root/xsan/xsan/build/skeleton/libSkeletonPass.so  
 endif
 
 ifneq ($(clang),y)

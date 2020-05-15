@@ -26,6 +26,7 @@ static const char __initconst opt_builtin_cmdline[] = CONFIG_CMDLINE;
 
 int* fault_table=0;
 int* fault_site=0;
+int* ehc_site=0;
 void* shadow_base=0;
 void* mem_shadow_base=0;
 void* hp_flag_shadow_base=0;
@@ -286,7 +287,6 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 
 	s=*(char*)shadow;
 	if((s&(1<<ord))&&(*addr==0||(*addr>=120&&*addr<124))){
-	    if(*addr>=118&&*addr<=124){
 		    e_trace[e_id].xasan_err_addr=addr;
 		    e_trace[e_id].xasan_err_size=size;
 		    e_trace[e_id].is_write=type;
@@ -298,7 +298,6 @@ void report_xasan(char* addr, int64_t size, int64_t type){
 		    if(e_id==20)
 			    e_id=0;
 		    break;
-	    }
 	}
     }
 

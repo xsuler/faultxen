@@ -1771,6 +1771,7 @@ long do_get_site(long long int p){
     printk("get fault site %d\n",ptr[0]);
     return 0;
 }
+
 long do_get_trace(long long int trace){
     struct err_trace *m_trace=(struct err_trace*) trace;
     m_trace->xasan_err_addr = e_trace[m_trace->id].xasan_err_addr;
@@ -1785,6 +1786,20 @@ long do_get_trace(long long int trace){
     return 0;
 }
 int rr;
+void func_use_after_free(int fault){
+	char* a=xmalloc(char);
+	xfree(a);
+	*a=1;
+	printk("%d",(int)*a);
+}
+void func_df(int fault){
+	char* a=xmalloc(char);
+	xfree(a);
+	xfree(a);
+	
+}
+
+
 
 void func_umr_stack(int fault){
 	int a[10];
@@ -1814,12 +1829,7 @@ void func_heap(int fault){
 	printk("normal %p %p %p\n",a,b,c);
 }
 
-void func_use_after_free(int fault){
-	char* a=xmalloc(char);
-	xfree(a);
-	*a=1;
-	printk("%d",(int)*a);
-}
+
 
 char* uar;
 
@@ -1836,13 +1846,6 @@ char ary[5]={0};
 void func_global(int fault){
 	ary[1-fault]=1;
 }
-void func_df(int fault){
-	char* a=xmalloc(char);
-	xfree(a);
-	xfree(a);
-	
-}
-
 void func_fail_l2(int fault){
      if(fault>0)
 	     goto fail;
@@ -1850,7 +1853,6 @@ void func_fail_l2(int fault){
 	     return;
 fail:
      func_use_after_free(fault);
-
 }
 
 
@@ -1894,6 +1896,7 @@ fail:
 }
 
 long do_set_fault(long long int fault){
+	int *str;
     if(fault==-1){
 	  xasan_flag = 1;
 	  printk("set xasan_flag: %d\n", xasan_flag);
@@ -1905,20 +1908,20 @@ long do_set_fault(long long int fault){
 	  printk("reset fault_site \n");
 	return 0;
     }
-
-     if(fault==-3){
+ 
+     if(fault==-4){
 	     func_use_after_free(fault);
 	return 0;
     }
-    if(fault==-4){
+    if(fault==-5){
 	     func_stack(fault);
 	return 0;
     }
-     if(fault==-5){
+     if(fault==-6){
 	     func_heap(fault);
 	return 0;
     }
-     if(fault==-6){
+     if(fault==-7){
 	     func_global(fault);
 	return 0;
     }
@@ -1927,14 +1930,10 @@ long do_set_fault(long long int fault){
 	return 0;
     }
      if(fault==-9){
-	func_umr_stack(fault);
-	return 0;
-    }
-     if(fault==-10){
 	func_umr_malloc(fault);
 	return 0;
     }
-     if(fault==-11){
+     if(fault==-10){
 	func_df(fault);
 	return 0;
     }
@@ -1948,18 +1947,8 @@ fail:
 		return 0;
 
      }
-     if(fault==-13){
-	     if(fault>0)
-		     goto fail1;
-	     else
-		     return 0;
-fail1:
-	     func_fail_l0(fault);
-		return 0;
 
-     }
-
-    int* str=(int*)fault;
+    str=(int*)fault;
     for (int i = 0; i < fault_len;  ++i)
 	   fault_table[i]=str[i]; 
     printk("getting cov %d\n",str[0]);

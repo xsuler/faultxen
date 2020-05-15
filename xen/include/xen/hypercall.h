@@ -221,6 +221,7 @@ compat_set_fault(
     u32 lo,
     s32 hi);
 
+
 extern int
 compat_get_site(
     u32 lo,

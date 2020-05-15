@@ -654,6 +654,7 @@ void *_xmalloc(unsigned long size, unsigned long align)
     if(!fault_table){
       fault_table=_xmalloc_c(4*fault_len);
       fault_site=_xmalloc_c(4*fault_len);
+      ehc_site=_xmalloc_c(4*fault_len);
     }
 
     if(!shadow_base ){
